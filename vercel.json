@@ -1,8 +1,8 @@
 {
-  "version": 2,
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
-  "outputDirectory": ".",
   "rewrites": [
     { "source": "/login", "destination": "/login.html" },
     { "source": "/signin", "destination": "/login.html" },
