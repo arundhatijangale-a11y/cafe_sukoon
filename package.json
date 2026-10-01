@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "build": "node -c js/app.js js/audioEngine.js js/auth.js js/data.js js/recommendationEngine.js",
+    "build": "node build.js",
     "validate": "node -c js/app.js js/audioEngine.js js/auth.js js/data.js js/recommendationEngine.js"
   },
   "keywords": [

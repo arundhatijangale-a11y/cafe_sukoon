@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Café Sukoon — Where Coffee Meets Music. Experience an AI-powered personalized music recommendation system blending Hollywood Hits and Bollywood Vibes with machine learning.">
+  <meta name="theme-color" content="#16100c">
+  <title>Café Sukoon — AI-Powered Music Sanctuary</title>
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- =================================================================
+       1. CONTINUOUS FULLSCREEN BACKGROUND VIDEO (1000374910.mp4)
+       ================================================================= -->
+  <div class="video-bg-container" id="videoBgContainer" aria-hidden="true">
+    <video class="bg-video-single" id="cafeVideoBg" autoplay loop muted playsinline preload="auto">
+      <source src="public/1000374910.mp4" type="video/mp4">
+      <source src="1000374910.mp4" type="video/mp4">
+      <source src="public/cafe vibe video.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay" id="videoOverlay"></div>
+  </div>
+
+  <!-- =================================================================
+       2. CLEAN NAVIGATION BAR
+       ================================================================= -->
+  <header class="main-header" id="mainHeader">
+    <div class="container nav-container">
+      <a href="#home" class="brand-logo" id="brandLogo">
+        <div class="brand-cup-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 19h16v2H4zm14-9h-1V5H3v8c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-1h1c1.66 0 3-1.34 3-3s-1.34-3-3-3zm-3 3c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7h10v6zm3-2c-.55 0-1-.45-1-1V9c0-.55.45-1 1-1s1 .45 1 1v1c0 .55-.45 1-1 1z"/>
+          </svg>
+        </div>
+        <span>Café <span class="brand-accent">Sukoon</span></span>
+      </a>
+
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#showcaseSection" class="nav-link">AI Recommendations</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn-nav-focus" id="btnFocusMode" aria-label="Enter Focus Mode" title="Enter Focus Mode">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+          <span>Focus Mode</span>
+        </button>
+
+        <button class="btn-nav-tune" id="btnNavTuneAI" aria-label="Tune AI Preferences">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.64 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+          </svg>
+          <span>Tune AI Taste</span>
+        </button>
+
+        <!-- Auth Navigation Buttons (When logged out) -->
+        <div class="nav-auth-group" id="navAuthGroup">
+          <a href="login.html" class="btn-nav-auth" id="btnNavLogin">Sign In</a>
+          <a href="login.html?mode=signup" class="btn-nav-auth-primary" id="btnNavSignup">Sign Up</a>
+        </div>
+
+        <!-- User Profile Dropdown Menu (When logged in) -->
+        <div class="user-profile-menu-wrap" id="userProfileMenuWrap" style="display: none;">
+          <button class="btn-user-avatar" id="btnUserAvatar" aria-haspopup="true" aria-expanded="false" title="Account Menu">
+            <span class="user-avatar-initial" id="userAvatarInitial">U</span>
+          </button>
+
+          <div class="profile-dropdown-card" id="profileDropdownCard" style="display: none;">
+            <div class="profile-dropdown-header">
+              <span class="profile-dropdown-name" id="dropdownUserName">Coffee Lover</span>
+              <span class="profile-dropdown-email" id="dropdownUserEmail">user@cafesukoon.com</span>
+            </div>
+            <div class="profile-dropdown-divider"></div>
+            <a href="#showcaseSection" class="profile-dropdown-item" id="menuLikedSongs">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <span>❤️ Liked Songs</span>
+            </a>
+            <a href="#showcaseSection" class="profile-dropdown-item" id="menuSavedPlaylists">
+              <svg viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+              <span>💾 Saved Playlists</span>
+            </a>
+            <button class="profile-dropdown-item" id="menuTuneTaste">
+              <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.64 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
+              <span>✨ Tune AI Taste</span>
+            </button>
+            <div class="profile-dropdown-divider"></div>
+            <button class="profile-dropdown-item btn-signout-item" id="btnSignOut">
+              <svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- =================================================================
+       3. HOMEPAGE / HERO SECTION
+       ================================================================= -->
+  <main id="mainContent">
+    <section class="hero-section" id="home">
+      <div class="container hero-container">
+        <h1 class="hero-heading">
+          Where Coffee <span class="hero-heading-gradient">Meets Music</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Your coffee, your music, your little escape.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#showcaseSection" class="btn-hero-primary" id="btnExploreMusic">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+            <span>Explore Music</span>
+          </a>
+          <button type="button" class="btn-hero-secondary" id="btnTuneTasteHero">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.28 19.64 10.59 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+            </svg>
+            <span>Tune Your Taste</span>
+          </button>
+        </div>
+
+        <!-- Silent backward compatibility state hooks -->
+        <span id="ribbonLang" style="display:none;"></span>
+        <span id="ribbonMood" style="display:none;"></span>
+        <span id="ribbonSingers" style="display:none;"></span>
+        <span id="ribbonSeeds" style="display:none;"></span>
+        <button id="btnEditRibbon" style="display:none;" aria-hidden="true"></button>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         4. AI MUSIC SHOWCASE & PERSONALIZED PLAYLIST SECTION
+         ================================================================= -->
+    <section class="showcase-section" id="showcaseSection">
+      <div class="container">
+        <div class="showcase-panel">
+          <!-- Header with Actions -->
+          <div class="showcase-header">
+            <div class="showcase-top-row">
+              <div class="showcase-title-area">
+                <h2 id="sectionTitle">
+                  <span>✨ Made For You (AI Daily Blend)</span>
+                </h2>
+                <p id="sectionSubtitle">
+                  Freshly brewed recommendations curated for your vibe.
+                </p>
+              </div>
+
+              <div class="showcase-action-btns">
+                <button class="btn-primary-action" id="btnPlayMix">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  <span>Play AI Mix</span>
+                </button>
+
+                <button class="btn-glass-action" id="btnRefreshAI" title="Refresh recommendations">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                  </svg>
+                  <span>Refresh</span>
+                </button>
+
+                <button class="btn-glass-action" id="btnSavePlaylist" title="Save current AI playlist">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                  </svg>
+                  <span>Save Playlist</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Interactive Vibe & Preference Cards (1-Click Realtime Tuning) -->
+            <div class="interactive-vibe-section" id="quickTasteBar">
+              <div class="vibe-cards-top">
+                <div class="vibe-lang-pills">
+                  <button class="quick-chip lang-pill active" data-type="lang" data-val="both">✨ All</button>
+                  <button class="quick-chip lang-pill" data-type="lang" data-val="hindi">🇮🇳 Bollywood</button>
+                  <button class="quick-chip lang-pill" data-type="lang" data-val="english">🌍 Hollywood</button>
+                </div>
+                <button class="btn-open-full-quiz" id="btnOpenFullQuiz" title="Deep AI Taste Tuning">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/>
+                  </svg>
+                  <span>Tune Taste</span>
+                </button>
+              </div>
+
+              <div class="vibe-cards-grid">
+                <div class="quick-chip vibe-card active" data-type="mood" data-val="cozy" role="button" tabindex="0">
+                  <div class="vibe-card-icon">☕</div>
+                  <div class="vibe-card-info">
+                    <span class="vibe-card-title">Cozy Coffee</span>
+                    <span class="vibe-card-subtitle">Acoustic warmth</span>
+                  </div>
+                </div>
+
+                <div class="quick-chip vibe-card" data-type="mood" data-val="romantic" role="button" tabindex="0">
+                  <div class="vibe-card-icon">❤️</div>
+                  <div class="vibe-card-info">
+                    <span class="vibe-card-title">Romantic Soul</span>
+                    <span class="vibe-card-subtitle">Heartfelt ballads</span>
+                  </div>
+                </div>
+
+                <div class="quick-chip vibe-card" data-type="mood" data-val="chill" role="button" tabindex="0">
+                  <div class="vibe-card-icon">🌧️</div>
+                  <div class="vibe-card-info">
+                    <span class="vibe-card-title">Rainy Lo-Fi</span>
+                    <span class="vibe-card-subtitle">Mellow beats</span>
+                  </div>
+                </div>
+
+                <div class="quick-chip vibe-card" data-type="mood" data-val="nostalgic" role="button" tabindex="0">
+                  <div class="vibe-card-icon">📻</div>
+                  <div class="vibe-card-info">
+                    <span class="vibe-card-title">Nostalgia</span>
+                    <span class="vibe-card-subtitle">Golden classics</span>
+                  </div>
+                </div>
+
+                <div class="quick-chip vibe-card" data-type="mood" data-val="uplifting" role="button" tabindex="0">
+                  <div class="vibe-card-icon">✨</div>
+                  <div class="vibe-card-info">
+                    <span class="vibe-card-title">Breezy Morning</span>
+                    <span class="vibe-card-subtitle">Light acoustic</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tabs: Recommendations, Liked Tracks, Saved Playlists -->
+            <div class="filter-toolbar">
+              <div class="playlist-category-tabs">
+                <button class="playlist-tab-btn active" data-view="recommendations">
+                  ✨ AI Recommendations
+                </button>
+                <button class="playlist-tab-btn" data-view="liked">
+                  ❤️ Liked Songs (<span id="tabLikedCount">0</span>)
+                </button>
+                <button class="playlist-tab-btn" data-view="saved">
+                  💾 Saved Playlists (<span id="tabSavedCount">0</span>)
+                </button>
+              </div>
+
+              <div class="search-wrapper">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                  <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search track, artist, genre..." aria-label="Search track, artist, genre">
+              </div>
+            </div>
+          </div>
+
+          <!-- Track List Table Header -->
+          <div class="track-list-header-row" id="trackListHeaderRow">
+            <div class="th-col-index">#</div>
+            <div class="th-col-cover">Artwork</div>
+            <div class="th-col-info">Title & Artist</div>
+            <div class="th-col-score">AI Match</div>
+            <div class="th-col-duration">Time</div>
+            <div class="th-col-actions">Actions</div>
+          </div>
+
+          <!-- Track List Table -->
+          <div class="track-list-container" id="trackListBody"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =================================================================
+       5. SPOTIFY-INSPIRED FLOATING MUSIC PLAYER
+       ================================================================= -->
+  <aside class="spotify-floating-player" id="spotifyFloatingPlayer" aria-label="Floating Music Player">
+    <!-- Left: Song Metadata, AI Match Pill, Like & Dislike, Spotify -->
+    <div class="player-meta-wrap">
+      <div class="player-cover-box">
+        <img id="playerCoverImg" src="" alt="Album Artwork Cover">
+      </div>
+      <div class="player-song-info">
+        <span class="player-song-title" id="playerSongTitle">Select a track</span>
+        <span class="player-song-artist" id="playerSongArtist">Café Sukoon AI</span>
+        <span class="player-ai-pill" id="playerAIPill">98% Match</span>
+      </div>
+
+      <!-- Like Button -->
+      <button class="player-icon-btn btn-like" id="btnPlayerLike" title="Like (boosts recommendations)" aria-label="Like song">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+      </button>
+
+      <!-- Dislike Button -->
+      <button class="player-icon-btn btn-dislike" id="btnPlayerDislike" title="Dislike (removes & retunes AI)" aria-label="Dislike song">
+        <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+      </button>
+
+      <!-- Spotify Web Player Link -->
+      <a id="playerSpotifyLink" href="https://open.spotify.com" target="_blank" rel="noopener noreferrer" class="player-icon-btn btn-spotify" title="Stream full track on Spotify" aria-label="Stream full track on Spotify">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 5.524 4.477 10 10 10 5.524 0 10-4.476 10-10 0-5.523-4.476-10-10-10zm4.587 14.426a.625.625 0 0 1-.86.208c-2.357-1.44-5.324-1.766-8.818-.968a.627.627 0 1 1-.28-1.222c3.823-.874 7.106-.503 9.75 1.121.306.188.404.59.208.861zm1.226-2.727a.784.784 0 0 1-1.077.26c-2.698-1.66-6.812-2.14-10.004-1.171a.785.785 0 0 1-.468-1.498c3.645-1.107 8.192-.572 11.29 1.332.368.227.486.711.259 1.077zm.106-2.835C14.693 8.87 9.38 8.694 6.302 9.63a.942.942 0 1 1-.552-1.802c3.53-1.071 9.404-.863 13.155 1.365a.942.942 0 0 1-.986 1.671z"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Center: Playback Controls & Scrubber -->
+    <div class="player-controls-wrap">
+      <div class="player-buttons-row">
+        <button class="player-ctrl-btn" id="btnPlayerShuffle" aria-label="Shuffle playback">
+          <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+        </button>
+
+        <button class="player-ctrl-btn" id="btnPlayerPrev" aria-label="Previous track">
+          <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+        </button>
+
+        <button class="btn-play-pause-spot" id="btnPlayerPlayPause" aria-label="Play or pause">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </button>
+
+        <button class="player-ctrl-btn" id="btnPlayerNext" aria-label="Skip to next track">
+          <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+
+        <button class="player-ctrl-btn" id="btnPlayerRepeat" aria-label="Repeat track">
+          <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+        </button>
+      </div>
+
+      <div class="player-scrubber-wrap">
+        <span class="time-text" id="playerCurrentTime">0:00</span>
+        <div class="progress-bar-track" id="playerProgressBarTrack">
+          <div class="progress-bar-fill" id="playerProgressFill">
+            <div class="progress-handle"></div>
+          </div>
+        </div>
+        <span class="time-text" id="playerTotalTime">3:15</span>
+      </div>
+    </div>
+
+    <!-- Right: Visualizer & Volume -->
+    <div class="player-right-wrap">
+      <div class="visualizer-bars-row" title="Live Audio Visualizer">
+        <span class="vis-bar"></span>
+        <span class="vis-bar"></span>
+        <span class="vis-bar"></span>
+        <span class="vis-bar"></span>
+        <span class="vis-bar"></span>
+      </div>
+
+      <div class="volume-box">
+        <button class="player-ctrl-btn" id="btnPlayerMute" aria-label="Mute or unmute">
+          <svg viewBox="0 0 24 24">
+            <path id="volIconPath" d="M3 9v6h4l5 5V4L9 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+          </svg>
+        </button>
+        <input type="range" class="volume-slider-spot" id="playerVolumeSlider" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+      </div>
+
+      <button class="player-ctrl-btn btn-player-focus" id="btnPlayerFocus" title="Focus Mode" aria-label="Toggle Focus Mode">
+        <svg viewBox="0 0 24 24">
+          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Small Exit Focus Mode Control -->
+  <button class="exit-focus-control" id="btnExitFocusMode" aria-label="Exit Focus Mode" title="Exit Focus Mode (Esc)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+    </svg>
+    <span>Exit Focus</span>
+  </button>
+
+  <!-- =================================================================
+       6. AI PREFERENCES MODAL (INTERACTIVE QUESTIONNAIRE - STEP 1)
+       ================================================================= -->
+  <div class="ai-modal-backdrop" id="aiPreferencesModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ai-modal-card">
+      <button class="modal-close-btn" id="btnCloseAIModal" aria-label="Close modal">&times;</button>
+
+      <div class="ai-modal-header">
+        <h3 class="ai-modal-title" id="modalTitle">Tune Your Taste</h3>
+        <p class="ai-modal-desc">Personalize your mix by selecting preferred vibe, genres, and artists.</p>
+      </div>
+
+      <!-- 1. Language Preference -->
+      <div class="pref-group">
+        <div class="pref-group-title">Language</div>
+        <div class="chip-options-grid" id="modalLangOptions">
+          <button class="pref-chip active" data-val="both">✨ Both Hollywood & Bollywood</button>
+          <button class="pref-chip" data-val="hindi">🇮🇳 Hindi Bollywood Only</button>
+          <button class="pref-chip" data-val="english">🌍 English Hollywood Only</button>
+        </div>
+      </div>
+
+      <!-- 2. Favorite Genres -->
+      <div class="pref-group">
+        <div class="pref-group-title">Favorite Genres</div>
+        <div class="chip-options-grid" id="modalGenreOptions">
+          <button class="pref-chip active" data-val="Acoustic">Acoustic</button>
+          <button class="pref-chip active" data-val="Romantic Pop">Romantic Pop</button>
+          <button class="pref-chip active" data-val="Lo-Fi Chill">Lo-Fi Chill</button>
+          <button class="pref-chip" data-val="Indie">Indie</button>
+          <button class="pref-chip" data-val="Evergreen">Evergreen</button>
+          <button class="pref-chip" data-val="Sufi / Ghazal">Sufi / Ghazal</button>
+          <button class="pref-chip" data-val="Coffeehouse">Coffeehouse</button>
+          <button class="pref-chip" data-val="Soul">Soul</button>
+          <button class="pref-chip" data-val="Ballad">Ballad</button>
+        </div>
+      </div>
+
+      <!-- 3. Favorite Singers -->
+      <div class="pref-group">
+        <div class="pref-group-title">Artists</div>
+        <div class="chip-options-grid" id="modalArtistOptions">
+          <button class="pref-chip active" data-val="Arijit Singh">Arijit Singh</button>
+          <button class="pref-chip active" data-val="Ed Sheeran">Ed Sheeran</button>
+          <button class="pref-chip active" data-val="Mohit Chauhan">Mohit Chauhan</button>
+          <button class="pref-chip active" data-val="Stephen Sanchez">Stephen Sanchez</button>
+          <button class="pref-chip" data-val="Anuv Jain">Anuv Jain</button>
+          <button class="pref-chip" data-val="Bruno Mars">Bruno Mars</button>
+          <button class="pref-chip" data-val="Coldplay">Coldplay</button>
+          <button class="pref-chip" data-val="Prateek Kuhad">Prateek Kuhad</button>
+          <button class="pref-chip" data-val="Atif Aslam">Atif Aslam</button>
+          <button class="pref-chip" data-val="A.R. Rahman">A.R. Rahman</button>
+          <button class="pref-chip" data-val="JVKE">JVKE</button>
+          <button class="pref-chip" data-val="Mohammed Rafi">Mohammed Rafi</button>
+          <button class="pref-chip" data-val="Kishore Kumar">Kishore Kumar</button>
+          <button class="pref-chip" data-val="Lata Mangeshkar">Lata Mangeshkar</button>
+          <button class="pref-chip" data-val="Harry Styles">Harry Styles</button>
+          <button class="pref-chip" data-val="John Legend">John Legend</button>
+          <button class="pref-chip" data-val="Darshan Raval">Darshan Raval</button>
+          <button class="pref-chip" data-val="Jack Johnson">Jack Johnson</button>
+        </div>
+      </div>
+
+      <!-- 4. Favorite Songs (Seed Tracks) -->
+      <div class="pref-group">
+        <div class="pref-group-title">Seed Tracks</div>
+        <div class="chip-options-grid" id="modalSongOptions">
+          <button class="pref-chip active" data-val="hw_1">Stephen Sanchez - Until I Found You</button>
+          <button class="pref-chip active" data-val="bw_1">Mohit Chauhan - Tum Se Hi</button>
+          <button class="pref-chip active" data-val="hw_2">Ed Sheeran - Photograph</button>
+          <button class="pref-chip active" data-val="bw_6">Arijit Singh - Kesariya</button>
+          <button class="pref-chip" data-val="bw_5">Anuv Jain - Baarishein</button>
+          <button class="pref-chip" data-val="hw_5">Ed Sheeran - Perfect</button>
+          <button class="pref-chip" data-val="hw_6">JVKE - Golden Hour</button>
+          <button class="pref-chip" data-val="bw_8">Amit Trivedi - Iktara</button>
+          <button class="pref-chip" data-val="hw_17">Coldplay - Yellow</button>
+          <button class="pref-chip" data-val="bw_2">Arijit Singh - Raabta</button>
+          <button class="pref-chip" data-val="hw_13">Elvis Presley - Can't Help Falling in Love</button>
+          <button class="pref-chip" data-val="bw_10">Kishore Kumar - Pal Pal Dil Ke Paas</button>
+          <button class="pref-chip" data-val="hw_9">The Neighbourhood - Sweater Weather</button>
+          <button class="pref-chip" data-val="bw_7">Arijit Singh - Apna Bana Le</button>
+          <button class="pref-chip" data-val="hw_18">James Arthur - Say You Won't Let Go</button>
+          <button class="pref-chip" data-val="bw_21">A.R. Rahman - Kun Faya Kun</button>
+        </div>
+      </div>
+
+      <!-- 5. Preferred Mood -->
+      <div class="pref-group">
+        <div class="pref-group-title">Vibe & Mood</div>
+        <div class="chip-options-grid" id="modalMoodOptions">
+          <button class="pref-chip active" data-val="cozy">☕ Cozy & Coffeehouse Warmth</button>
+          <button class="pref-chip" data-val="romantic">❤️ Romantic & Heartfelt</button>
+          <button class="pref-chip" data-val="chill">🌧️ Lo-Fi & Deep Chill</button>
+          <button class="pref-chip" data-val="nostalgic">📻 Golden Vintage Nostalgia</button>
+          <button class="pref-chip" data-val="uplifting">✨ Gentle & Uplifting</button>
+        </div>
+      </div>
+
+      <button class="btn-apply-ai" id="btnApplyPreferences">Apply Taste Profile</button>
+    </div>
+  </div>
+
+  <!-- =================================================================
+       7. SAVE PLAYLIST MODAL
+       ================================================================= -->
+  <div class="save-modal-backdrop" id="savePlaylistModal" role="dialog" aria-modal="true">
+    <div class="save-modal-card">
+      <button class="modal-close-btn" id="btnCloseSaveModal" aria-label="Close modal">&times;</button>
+      <h3 style="font-family: var(--font-heading); color: #fff; font-size: 1.3rem;">Save Playlist</h3>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Save this blend to your café library.</p>
+      
+      <input type="text" class="save-input" id="savePlaylistInput" placeholder="e.g. Rainy Afternoon Blend" aria-label="Playlist Name">
+      
+      <div style="display: flex; gap: 10px; justify-content: flex-end;">
+        <button class="btn-glass-action" id="btnCancelSave" style="padding: 8px 16px;">Cancel</button>
+        <button class="btn-primary-action" id="btnConfirmSave" style="padding: 8px 20px;">Save Playlist</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Feedback -->
+  <div class="toast-badge" id="toastBadge" role="status" aria-live="polite"></div>
+
+  <!-- Core JavaScript Module -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

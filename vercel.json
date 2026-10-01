@@ -3,6 +3,7 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
+  "outputDirectory": "dist",
   "rewrites": [
     { "source": "/login", "destination": "/login.html" },
     { "source": "/signin", "destination": "/login.html" },
