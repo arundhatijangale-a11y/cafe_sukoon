@@ -1,0 +1,7 @@
+# Ignore unrelated backup directories and OS files
+_backup_job_portal/
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini

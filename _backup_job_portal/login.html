@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CareerConnect Authentication Portal. Sign in or register as a Job Seeker or Recruiter.">
+  <title>Sign In / Register | CareerConnect</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <span>Career<span class="highlight">Connect</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="jobs.html" class="nav-link">Find Jobs</a>
+        <a href="companies.html" class="nav-link">Companies</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="index.html" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-arrow-left"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        
+        <!-- Header -->
+        <div class="auth-header">
+          <h1 id="auth-title">Welcome Back</h1>
+          <p id="auth-desc">Log in to manage your job applications and explore careers</p>
+        </div>
+
+        <!-- Role Selector Switch -->
+        <div class="role-switch-container">
+          <button type="button" class="role-switch-btn active" id="role-seeker-btn" onclick="switchRole('seeker')">
+            <i class="fa-solid fa-user"></i> Job Seeker
+          </button>
+          <button type="button" class="role-switch-btn" id="role-recruiter-btn" onclick="switchRole('recruiter')">
+            <i class="fa-solid fa-building"></i> Recruiter / Employer
+          </button>
+        </div>
+
+        <!-- Main Form Tabs (Sign In / Sign Up) -->
+        <div class="dashboard-tabs" style="justify-content: center; margin-bottom: 1.5rem;">
+          <button class="tab-btn active" id="tab-login-btn" onclick="switchAuthTab('login')">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In
+          </button>
+          <button class="tab-btn" id="tab-signup-btn" onclick="switchAuthTab('signup')">
+            <i class="fa-solid fa-user-plus"></i> Create Account
+          </button>
+        </div>
+
+        <!-- Demonstration Notice Banner -->
+        <div style="background:var(--slate-100); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:0.65rem 0.9rem; margin-bottom:1.5rem; display:flex; align-items:center; gap:0.65rem; font-size:0.83rem; color:var(--slate-600);">
+          <i class="fa-solid fa-circle-info" style="color:var(--primary); font-size:1rem;"></i>
+          <span><strong>Demonstration Mode:</strong> Client-side simulation. No database or real password required.</span>
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="form-login" onsubmit="handleAuthSubmit(event, 'login')">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="login-email" class="form-control" placeholder="name@example.com" value="alex.morgan@example.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+              <label class="form-label" style="margin-bottom:0;">Password</label>
+              <a href="javascript:void(0)" onclick="showToast('Password reset link simulated sent to email!', 'info')" style="font-size:0.82rem; color:var(--primary); font-weight:600;">Forgot?</a>
+            </div>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="login-password" class="form-control" placeholder="••••••••" value="demo123456" required />
+              <button type="button" onclick="togglePasswordVisibility('login-password', this)" style="position:absolute; right:1rem; top:50%; transform:translateY(-50%); color:var(--slate-400);">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; font-size:0.88rem;">
+            <label style="display:flex; align-items:center; gap:0.5rem; cursor:pointer; color:var(--slate-600);">
+              <input type="checkbox" checked style="accent-color:var(--primary);" /> Remember me
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-gradient" style="width:100%; padding:0.85rem; font-size:1rem;">
+            <i class="fa-solid fa-right-to-bracket"></i> Sign In to Account
+          </button>
+        </form>
+
+        <!-- Sign Up Form (Hidden by default) -->
+        <form id="form-signup" style="display:none;" onsubmit="handleAuthSubmit(event, 'signup')">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="signup-name" class="form-control" placeholder="Jordan Lee" required />
+              </div>
+            </div>
+            <div class="form-group" id="company-field-group" style="display:none;">
+              <label class="form-label">Company Name *</label>
+              <div class="input-icon-wrapper">
+                <i class="fa-solid fa-building"></i>
+                <input type="text" id="signup-company" class="form-control" placeholder="TechVentures Inc." />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-envelope"></i>
+              <input type="email" id="signup-email" class="form-control" placeholder="jordan@example.com" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <div class="input-icon-wrapper">
+              <i class="fa-solid fa-lock"></i>
+              <input type="password" id="signup-password" class="form-control" placeholder="Create a strong password" required />
+              <button type="button" onclick="togglePasswordVisibility('signup-password', this)" style="position:absolute; right:1rem; top:50%; transform:translateY(-50%); color:var(--slate-400);">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="margin-bottom:1.5rem; font-size:0.85rem; color:var(--slate-500);">
+            By registering, you agree to our <a href="#" style="color:var(--primary); text-decoration:underline;">Terms</a> and <a href="#" style="color:var(--primary); text-decoration:underline;">Privacy Policy</a>.
+          </div>
+
+          <button type="submit" class="btn btn-gradient" style="width:100%; padding:0.85rem; font-size:1rem;">
+            <i class="fa-solid fa-user-plus"></i> Complete Registration
+          </button>
+        </form>
+
+        <!-- Instant 1-Click Demo Accounts -->
+        <div class="demo-credentials-box">
+          <p><i class="fa-solid fa-wand-magic-sparkles"></i> 1-Click Instant Demo Login</p>
+          <div class="demo-buttons-group">
+            <button type="button" class="btn btn-sm btn-outline" onclick="instantDemoLogin('seeker')">
+              <i class="fa-solid fa-user" style="color:var(--primary);"></i> Demo Job Seeker
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-purple" onclick="instantDemoLogin('recruiter')">
+              <i class="fa-solid fa-building" style="color:var(--purple);"></i> Demo Recruiter
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    let currentRole = "seeker";
+    let currentTab = "login";
+
+    function switchRole(role) {
+      currentRole = role;
+      const seekerBtn = document.getElementById("role-seeker-btn");
+      const recruiterBtn = document.getElementById("role-recruiter-btn");
+      const companyField = document.getElementById("company-field-group");
+      const emailInput = document.getElementById("login-email");
+
+      if (role === "seeker") {
+        seekerBtn.classList.add("active");
+        recruiterBtn.classList.remove("active");
+        if (companyField) companyField.style.display = "none";
+        if (emailInput && currentTab === "login") {
+          emailInput.value = "alex.morgan@example.com";
+        }
+        document.getElementById("auth-desc").textContent = "Log in to manage your job applications and explore careers";
+      } else {
+        recruiterBtn.classList.add("active");
+        seekerBtn.classList.remove("active");
+        if (companyField) companyField.style.display = "block";
+        if (emailInput && currentTab === "login") {
+          emailInput.value = "sarah.jenkins@techcorp.io";
+        }
+        document.getElementById("auth-desc").textContent = "Log in to post openings and review qualified candidates";
+      }
+    }
+
+    function switchAuthTab(tab) {
+      currentTab = tab;
+      const loginBtn = document.getElementById("tab-login-btn");
+      const signupBtn = document.getElementById("tab-signup-btn");
+      const formLogin = document.getElementById("form-login");
+      const formSignup = document.getElementById("form-signup");
+      const authTitle = document.getElementById("auth-title");
+
+      if (tab === "login") {
+        loginBtn.classList.add("active");
+        signupBtn.classList.remove("active");
+        formLogin.style.display = "block";
+        formSignup.style.display = "none";
+        authTitle.textContent = "Welcome Back";
+      } else {
+        signupBtn.classList.add("active");
+        loginBtn.classList.remove("active");
+        formSignup.style.display = "block";
+        formLogin.style.display = "none";
+        authTitle.textContent = "Create Account";
+      }
+    }
+
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector("i");
+      if (input.type === "password") {
+        input.type = "text";
+        icon.className = "fa-solid fa-eye-slash";
+      } else {
+        input.type = "password";
+        icon.className = "fa-solid fa-eye";
+      }
+    }
+
+    function instantDemoLogin(role) {
+      window.CareerStore.setActiveRole(role);
+      showToast(`Logged in as demo ${role === 'seeker' ? 'Job Seeker (Alex Morgan)' : 'Recruiter (Sarah Jenkins)'}!`, "success");
+      
+      setTimeout(() => {
+        if (role === "seeker") {
+          window.location.href = "dashboard-seeker.html";
+        } else {
+          window.location.href = "dashboard-recruiter.html";
+        }
+      }, 700);
+    }
+
+    function handleAuthSubmit(e, type) {
+      e.preventDefault();
+      window.CareerStore.setActiveRole(currentRole);
+
+      if (type === "signup") {
+        const name = document.getElementById("signup-name").value;
+        const email = document.getElementById("signup-email").value;
+        const company = document.getElementById("signup-company")?.value || "TechCorp";
+
+        window.CareerStore.updateUserProfile({
+          name: name,
+          email: email,
+          company: currentRole === "recruiter" ? company : undefined
+        });
+
+        showToast(`Account created successfully! Welcome, ${name}.`, "success");
+      } else {
+        const email = document.getElementById("login-email").value;
+        showToast(`Welcome back, ${email}!`, "success");
+      }
+
+      setTimeout(() => {
+        if (currentRole === "seeker") {
+          window.location.href = "dashboard-seeker.html";
+        } else {
+          window.location.href = "dashboard-recruiter.html";
+        }
+      }, 600);
+    }
+
+    // Check URL parameters for tab and role preset
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("tab") === "signup") {
+        switchAuthTab("signup");
+      }
+      if (params.get("role") === "recruiter") {
+        switchRole("recruiter");
+      }
+    });
+  </script>
+</body>
+</html>

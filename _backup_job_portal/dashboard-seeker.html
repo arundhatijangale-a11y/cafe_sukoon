@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CareerConnect Candidate Dashboard. Track your job applications, view saved jobs, and manage your professional resume.">
+  <title>Job Seeker Dashboard | CareerConnect</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <span>Career<span class="highlight">Connect</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="jobs.html" class="nav-link">Find Jobs</a>
+        <a href="companies.html" class="nav-link">Companies</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="nav-user-account" style="display:flex; align-items:center; gap:0.6rem;">
+          <!-- Dynamically populated -->
+        </div>
+        <a href="dashboard-recruiter.html" class="btn btn-outline-purple btn-sm">
+          <i class="fa-solid fa-repeat"></i> Switch to Recruiter
+        </a>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
+  <div id="mobile-nav-drawer" class="mobile-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="jobs.html" class="nav-link">Find Jobs</a>
+    <a href="companies.html" class="nav-link">Companies</a>
+    <a href="about.html" class="nav-link">About Us</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <hr style="border:none; border-top:1px solid var(--slate-200); margin:0.5rem 0;">
+    <div style="display:flex; gap:0.75rem; flex-direction:column;">
+      <a href="dashboard-seeker.html" class="btn btn-primary"><i class="fa-solid fa-user"></i> Seeker Dashboard</a>
+      <a href="dashboard-recruiter.html" class="btn btn-outline-purple"><i class="fa-solid fa-building"></i> Recruiter Dashboard</a>
+      <a href="login.html" class="btn btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container dashboard-wrapper">
+      
+      <!-- Top Seeker Profile Card -->
+      <div class="dashboard-header">
+        <div class="dashboard-user-info">
+          <div class="dashboard-avatar" id="seeker-avatar">
+            AM
+          </div>
+          <div class="dashboard-user-details">
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <h1 id="seeker-name">Alex Morgan</h1>
+              <span class="badge badge-green"><i class="fa-solid fa-check"></i> Actively Looking</span>
+            </div>
+            <p id="seeker-title" style="font-weight:600; color:var(--slate-700); margin-bottom:0.4rem;">Senior Frontend Engineer</p>
+            <div style="display:flex; flex-wrap:wrap; gap:1.2rem; font-size:0.88rem; color:var(--slate-500);">
+              <span id="seeker-location"><i class="fa-solid fa-location-dot"></i> San Francisco, CA</span>
+              <span id="seeker-email"><i class="fa-solid fa-envelope"></i> alex.morgan@example.com</span>
+              <span id="seeker-phone"><i class="fa-solid fa-phone"></i> +1 (555) 234-5678</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.75rem;">
+          <button class="btn btn-outline" onclick="openEditProfileModal()">
+            <i class="fa-solid fa-pen-to-square"></i> Edit Profile
+          </button>
+          <a href="jobs.html" class="btn btn-primary">
+            <i class="fa-solid fa-magnifying-glass"></i> Browse Jobs
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Bio and Skills Bar -->
+      <div style="background:var(--white); border:1px solid var(--slate-200); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:2rem;">
+        <h4 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--slate-400); margin-bottom:0.6rem;">About Candidate</h4>
+        <p id="seeker-bio" style="color:var(--slate-600); line-height:1.6; margin-bottom:1.25rem;">
+          Passionate UI/UX focused frontend engineer with 5+ years building accessible, high-performance web applications with React, TypeScript, and modern CSS.
+        </p>
+        <h4 style="font-size:0.95rem; text-transform:uppercase; letter-spacing:0.04em; color:var(--slate-400); margin-bottom:0.6rem;">Featured Skills</h4>
+        <div id="seeker-skills-list" style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+          <!-- Skills pills rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Metric Stats Counters -->
+      <div class="dashboard-stats-grid">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--primary-light); color:var(--primary);">
+            <i class="fa-solid fa-paper-plane"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="metric-applied-count">3</h3>
+            <p>Applied Roles</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--purple-light); color:var(--purple);">
+            <i class="fa-solid fa-bookmark"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="metric-saved-count">3</h3>
+            <p>Saved Jobs</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--success-light); color:var(--success);">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="metric-interviews-count">1</h3>
+            <p>Interviews Scheduled</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--warning-light); color:var(--warning);">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="metric-ats-score">94%</h3>
+            <p>Resume ATS Score</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard View Tabs -->
+      <div class="dashboard-tabs">
+        <button class="tab-btn active" id="tab-btn-applied" onclick="switchDashboardTab('applied')">
+          <i class="fa-solid fa-list-check"></i> Applied Jobs
+        </button>
+        <button class="tab-btn" id="tab-btn-saved" onclick="switchDashboardTab('saved')">
+          <i class="fa-solid fa-bookmark"></i> Saved Jobs
+        </button>
+        <button class="tab-btn" id="tab-btn-resume" onclick="switchDashboardTab('resume')">
+          <i class="fa-solid fa-file-pdf"></i> Resume Manager
+        </button>
+      </div>
+
+      <!-- Tab 1: Applied Jobs -->
+      <div id="tab-content-applied" class="tab-content active">
+        <div id="applied-jobs-table-wrapper" class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title & Company</th>
+                <th>Date Applied</th>
+                <th>Status</th>
+                <th>Recruiter Notes</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="applied-jobs-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="applied-jobs-empty" class="empty-state" style="display:none;">
+          <div class="empty-state-icon">
+            <i class="fa-solid fa-file-circle-check"></i>
+          </div>
+          <h3>No applications yet</h3>
+          <p>Explore high-paying tech and design positions and apply with a single click.</p>
+          <a href="jobs.html" class="btn btn-primary">Find Jobs Now</a>
+        </div>
+      </div>
+
+      <!-- Tab 2: Saved Jobs -->
+      <div id="tab-content-saved" class="tab-content">
+        <div id="saved-jobs-grid" class="job-cards-grid">
+          <!-- Rendered by JS -->
+        </div>
+
+        <div id="saved-jobs-empty" class="empty-state" style="display:none;">
+          <div class="empty-state-icon">
+            <i class="fa-regular fa-bookmark"></i>
+          </div>
+          <h3>No saved jobs</h3>
+          <p>Click the bookmark icon on any job card to save it for later review.</p>
+          <a href="jobs.html" class="btn btn-primary">Browse Openings</a>
+        </div>
+      </div>
+
+      <!-- Tab 3: Resume Manager -->
+      <div id="tab-content-resume" class="tab-content">
+        <div style="background:var(--white); border:1px solid var(--slate-200); border-radius:var(--radius-lg); padding:2rem;">
+          <div style="margin-bottom:1.5rem;">
+            <h3 style="font-size:1.35rem; margin-bottom:0.35rem;">Manage Your Professional Resume</h3>
+            <p style="color:var(--slate-500); font-size:0.92rem;">
+              Your resume is automatically attached during 1-click job applications and parsed by our intelligent ATS match analyzer.
+            </p>
+          </div>
+
+          <!-- Active Resume Card -->
+          <div class="current-resume-card">
+            <div class="resume-file-info">
+              <div class="resume-icon-badge">
+                <i class="fa-solid fa-file-pdf"></i>
+              </div>
+              <div>
+                <h4 style="font-size:1.05rem; margin-bottom:0.25rem;" id="resume-filename">Alex_Morgan_Resume_2026.pdf</h4>
+                <p style="color:var(--slate-500); font-size:0.85rem;" id="resume-meta">Uploaded on Sep 25, 2026 • Size: 248 KB</p>
+              </div>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+              <span class="badge badge-purple" id="resume-ats-badge" style="font-size:0.85rem;">ATS Score: 94/100</span>
+              <button class="btn btn-sm btn-outline" onclick="simulateResumeDownload()">
+                <i class="fa-solid fa-download"></i> Download
+              </button>
+              <button class="btn btn-sm btn-outline" style="color:var(--danger); border-color:#fecaca;" onclick="simulateResumeDelete()">
+                <i class="fa-solid fa-trash-can"></i> Remove
+              </button>
+            </div>
+          </div>
+
+          <!-- Drag and Drop Zone -->
+          <div class="resume-dropzone" id="resume-dropzone">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <h4>Drag & drop your new resume file here</h4>
+            <p>Supports PDF, DOC, DOCX files up to 10 MB</p>
+            <div style="margin-top:1rem;">
+              <button type="button" class="btn btn-sm btn-primary">
+                <i class="fa-solid fa-folder-open"></i> Browse Files
+              </button>
+            </div>
+            <input type="file" id="resume-file-input" style="display:none;" accept=".pdf,.doc,.docx" />
+          </div>
+
+          <div style="background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-md); padding:1rem; display:flex; gap:0.75rem; align-items:flex-start;">
+            <i class="fa-solid fa-circle-check" style="color:var(--success); font-size:1.1rem; margin-top:0.15rem;"></i>
+            <div style="font-size:0.88rem; color:var(--slate-600); line-height:1.5;">
+              <strong>ATS Optimization Tip:</strong> Ensure your resume includes keywords like "TypeScript", "React", "System Architecture", and metrics showcasing your impact (e.g., "improved load time by 40%").
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none; padding-top:0;">
+        <div>&copy; 2026 CareerConnect. Logged in as Candidate Alex Morgan.</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="jobs.html">Find Jobs</a>
+          <a href="dashboard-recruiter.html">Recruiter View</a>
+          <a href="contact.html">Support</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/seeker-dashboard.js"></script>
+</body>
+</html>

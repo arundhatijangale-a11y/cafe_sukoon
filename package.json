@@ -1,0 +1,20 @@
+{
+  "name": "cafe-sukoon",
+  "version": "1.0.0",
+  "description": "Café Sukoon — AI-Powered Music Sanctuary & Personalized Music Recommendation System",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build": "node -c js/app.js js/audioEngine.js js/auth.js js/data.js js/recommendationEngine.js",
+    "validate": "node -c js/app.js js/audioEngine.js js/auth.js js/data.js js/recommendationEngine.js"
+  },
+  "keywords": [
+    "music",
+    "ai-recommendations",
+    "cafe-sukoon",
+    "lofi",
+    "audio"
+  ],
+  "author": "Café Sukoon",
+  "license": "MIT"
+}

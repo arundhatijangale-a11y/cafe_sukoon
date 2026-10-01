@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign in or sign up to Café Sukoon — Your AI-powered personalized music sanctuary where coffee meets music.">
+  <meta name="theme-color" content="#16100c">
+  <title>Welcome Back — Café Sukoon</title>
+
+  <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/auth.css">
+
+  <!-- Supabase Official Client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="auth-body">
+
+  <div class="auth-split-wrapper">
+    <!-- =================================================================
+         LEFT PANEL: COZY CAFÉ SCENE & BRANDING
+         ================================================================= -->
+    <div class="auth-visual-panel">
+      <div class="auth-visual-overlay"></div>
+      
+      <!-- Ambient Glowing Elements -->
+      <div class="ambient-coffee-glow"></div>
+      <div class="ambient-gold-glow"></div>
+
+      <!-- Left Panel Header -->
+      <div class="visual-brand-header">
+        <a href="index.html" class="brand-logo" title="Return to Café Sukoon">
+          <div class="brand-cup-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 19h16v2H4zm14-9h-1V5H3v8c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-1h1c1.66 0 3-1.34 3-3s-1.34-3-3-3zm-3 3c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V7h10v6zm3-2c-.55 0-1-.45-1-1V9c0-.55.45-1 1-1s1 .45 1 1v1c0 .55-.45 1-1 1z"/>
+            </svg>
+          </div>
+          <span>Café <span class="brand-accent">Sukoon</span></span>
+        </a>
+      </div>
+
+      <!-- Illustrated Café Art Stage -->
+      <div class="cafe-illustration-card">
+        <div class="illustration-art-frame">
+          <!-- Warm Hanging Pendant Lamps -->
+          <div class="cafe-pendant-lamps" aria-hidden="true">
+            <div class="pendant-lamp lamp-left"><div class="lamp-cord"></div><div class="lamp-shade"></div><div class="lamp-bulb"></div></div>
+            <div class="pendant-lamp lamp-center"><div class="lamp-cord"></div><div class="lamp-shade"></div><div class="lamp-bulb"></div></div>
+            <div class="pendant-lamp lamp-right"><div class="lamp-cord"></div><div class="lamp-shade"></div><div class="lamp-bulb"></div></div>
+          </div>
+
+          <!-- Steaming Coffee & Vinyl Record Motif -->
+          <div class="cafe-steaming-cup">
+            <div class="steam-wave steam-1"></div>
+            <div class="steam-wave steam-2"></div>
+            <div class="steam-wave steam-3"></div>
+            <div class="cup-saucer">
+              <div class="cup-body">
+                <div class="latte-art-heart"></div>
+              </div>
+              <div class="cup-handle"></div>
+            </div>
+          </div>
+
+          <div class="spinning-vinyl-record" aria-hidden="true">
+            <div class="vinyl-groove groove-1"></div>
+            <div class="vinyl-groove groove-2"></div>
+            <div class="vinyl-center-label">
+              <span class="vinyl-dot"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="visual-quote-area">
+          <h2 class="visual-quote-heading">Where Every Sip Has A Soundtrack.</h2>
+
+          <div class="visual-features-row">
+            <div class="visual-feature-pill">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <span>Liked Tracks</span>
+            </div>
+            <div class="visual-feature-pill">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <span>Saved Playlists</span>
+            </div>
+            <div class="visual-feature-pill">
+              <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+              <span>AI Music Profile</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================
+         RIGHT PANEL: LOGIN / SIGNUP FORM
+         ================================================================= -->
+    <div class="auth-form-panel">
+      <!-- Back to Sanctuary link -->
+      <a href="index.html" class="auth-back-link">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        <span>Back to Café Sukoon</span>
+      </a>
+
+      <div class="auth-card-container">
+        <!-- Auth Tabs (Login / Sign Up) -->
+        <div class="auth-nav-tabs" role="tablist">
+          <button class="auth-tab-btn active" id="tabLogin" role="tab" aria-selected="true" aria-controls="formLogin">
+            Sign In
+          </button>
+          <button class="auth-tab-btn" id="tabSignup" role="tab" aria-selected="false" aria-controls="formSignup">
+            Create Account
+          </button>
+        </div>
+
+        <!-- Header Texts -->
+        <div class="auth-heading-wrap">
+          <h1 class="auth-heading" id="authTitle">Welcome Back to Café Sukoon</h1>
+          <p class="auth-subheading" id="authSubtitle">Your coffee, your music, your little escape.</p>
+        </div>
+
+        <!-- Social / Google Sign-In -->
+        <button class="btn-google-auth" id="btnGoogleAuth" type="button" aria-label="Continue with Google">
+          <svg class="google-svg" viewBox="0 0 24 24">
+            <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.5 1 3.7 3.6 1.9 7.3l3.7 2.9C6.5 7.1 9 5 12 5z"/>
+            <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+            <path fill="#FBBC05" d="M5.6 14.8c-.2-.7-.4-1.5-.4-2.8s.2-2.1.4-2.8L1.9 6.3C.7 8.7 0 10.3 0 12s.7 3.3 1.9 5.7l3.7-2.9z"/>
+            <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3 0-5.5-2.1-6.4-5.2L1.9 16c1.8 3.7 5.6 7 10.1 7z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <div class="auth-divider">
+          <span>or continue with email</span>
+        </div>
+
+        <!-- Notification Alert Box -->
+        <div class="auth-alert" id="authAlert" role="alert" style="display: none;"></div>
+
+        <!-- =============================================================
+             1. LOGIN FORM
+             ============================================================= -->
+        <form class="auth-form" id="formLogin" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="loginEmail">Email Address</label>
+            <div class="input-field-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              <input type="email" id="loginEmail" class="form-input" placeholder="you@domain.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label-row">
+              <label class="form-label" for="loginPassword">Password</label>
+              <button type="button" class="btn-link-action" id="btnForgotPass">Forgot password?</button>
+            </div>
+            <div class="input-field-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="btn-toggle-eye" id="toggleLoginPass" aria-label="Toggle password visibility">
+                <svg class="eye-icon eye-open" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                <svg class="eye-icon eye-closed" viewBox="0 0 24 24" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth-primary" id="btnLoginSubmit">
+            <span class="btn-text">Sign In to Sanctuary</span>
+            <div class="btn-spinner" style="display: none;"></div>
+          </button>
+        </form>
+
+        <!-- =============================================================
+             2. SIGN UP FORM
+             ============================================================= -->
+        <form class="auth-form" id="formSignup" style="display: none;" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="signupName">Full Name</label>
+            <div class="input-field-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              <input type="text" id="signupName" class="form-input" placeholder="e.g. Maya Sharma" required autocomplete="name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupEmail">Email Address</label>
+            <div class="input-field-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              <input type="email" id="signupEmail" class="form-input" placeholder="you@domain.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="signupPassword">Create Password</label>
+            <div class="input-field-wrap">
+              <svg class="input-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+              <input type="password" id="signupPassword" class="form-input" placeholder="At least 6 characters" required autocomplete="new-password">
+              <button type="button" class="btn-toggle-eye" id="toggleSignupPass" aria-label="Toggle password visibility">
+                <svg class="eye-icon eye-open" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                <svg class="eye-icon eye-closed" viewBox="0 0 24 24" style="display:none;"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-auth-primary" id="btnSignupSubmit">
+            <span class="btn-text">Create Free Account</span>
+            <div class="btn-spinner" style="display: none;"></div>
+          </button>
+        </form>
+
+        <!-- Continue As Guest -->
+        <div class="guest-action-box">
+          <button type="button" class="btn-guest-action" id="btnContinueGuest">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+            <span>Continue as Guest</span>
+          </button>
+        </div>
+
+        <!-- Footer switch text -->
+        <div class="auth-footer-prompt">
+          <span id="authPromptText">Don't have an account yet?</span>
+          <button type="button" class="btn-link-action" id="btnToggleAuthMode">Sign Up Free</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =================================================================
+       FORGOT PASSWORD MODAL
+       ================================================================= -->
+  <div class="auth-modal-backdrop" id="modalForgotPass" role="dialog" aria-modal="true" style="display: none;">
+    <div class="auth-modal-card">
+      <button class="modal-close-btn" id="btnCloseForgotModal" aria-label="Close modal">&times;</button>
+      <h3 class="modal-title">Reset Password</h3>
+      <p class="modal-desc">Enter your email to receive a password reset link.</p>
+      
+      <div class="form-group" style="margin-top: 18px;">
+        <label class="form-label" for="forgotEmail">Email Address</label>
+        <div class="input-field-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          <input type="email" id="forgotEmail" class="form-input" placeholder="you@domain.com" required>
+        </div>
+      </div>
+
+      <div class="auth-alert" id="forgotAlert" style="display: none;"></div>
+
+      <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+        <button type="button" class="btn-glass-action" id="btnCancelForgot">Cancel</button>
+        <button type="button" class="btn-auth-primary" id="btnSendResetLink" style="padding: 10px 22px; width: auto;">Send Reset Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Feedback -->
+  <div class="toast-badge" id="toastBadge" role="status" aria-live="polite"></div>
+
+  <!-- Auth Engine Module -->
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About CareerConnect - Empowering careers and modern hiring with transparency, intelligent matching, and verified opportunities.">
+  <title>About Us | CareerConnect</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <span>Career<span class="highlight">Connect</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="jobs.html" class="nav-link">Find Jobs</a>
+        <a href="companies.html" class="nav-link">Companies</a>
+        <a href="about.html" class="nav-link active">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="nav-user-account" style="display:flex; align-items:center; gap:0.6rem;"></div>
+        <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+        <a href="login.html?tab=signup" class="btn btn-gradient btn-sm">Sign Up</a>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
+  <div id="mobile-nav-drawer" class="mobile-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="jobs.html" class="nav-link">Find Jobs</a>
+    <a href="companies.html" class="nav-link">Companies</a>
+    <a href="about.html" class="nav-link active">About Us</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <hr style="border:none; border-top:1px solid var(--slate-200); margin:0.5rem 0;">
+    <div style="display:flex; gap:0.75rem; flex-direction:column;">
+      <a href="dashboard-seeker.html" class="btn btn-outline"><i class="fa-solid fa-user"></i> Seeker Dashboard</a>
+      <a href="dashboard-recruiter.html" class="btn btn-outline-purple"><i class="fa-solid fa-building"></i> Recruiter Dashboard</a>
+      <a href="login.html" class="btn btn-gradient"><i class="fa-solid fa-right-to-bracket"></i> Login / Register</a>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <!-- Hero Section -->
+    <section class="section" style="background:var(--hero-gradient); padding:4rem 0;">
+      <div class="container text-center" style="max-width:800px; margin:0 auto; text-align:center;">
+        <span class="section-tag"><i class="fa-solid fa-compass"></i> Our Purpose</span>
+        <h1 style="font-size:3rem; margin-bottom:1.2rem; line-height:1.2;">
+          Bridging Exceptional Talent with <span class="text-gradient">Visionary Teams</span>
+        </h1>
+        <p style="font-size:1.18rem; color:var(--slate-600); line-height:1.65;">
+          CareerConnect was founded on a simple conviction: finding a fulfilling job shouldn't be an opaque, stressful maze. We provide complete compensation transparency, direct recruiter access, and verified postings.
+        </p>
+      </div>
+    </section>
+
+    <!-- Platform Stats Banner -->
+    <section style="background:var(--white); padding:3rem 0; border-top:1px solid var(--slate-200); border-bottom:1px solid var(--slate-200);">
+      <div class="container">
+        <div class="hero-stats" style="margin-top:0;">
+          <div class="stat-item">
+            <span class="stat-number">15,000+</span>
+            <span class="stat-label">Active Job Openings</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">850+</span>
+            <span class="stat-label">Verified Tech Companies</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">120,000+</span>
+            <span class="stat-label">Placed Professionals</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">45+</span>
+            <span class="stat-label">Countries Supported</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mission & Core Values -->
+    <section class="section" style="background:var(--slate-50);">
+      <div class="container">
+        <div class="section-title">
+          <span class="section-tag"><i class="fa-solid fa-shield-halved"></i> What Drives Us</span>
+          <h2>Our Core Values</h2>
+          <p>The principles that guide how we build technology and foster authentic career connections</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon" style="background:var(--primary-light); color:var(--primary);">
+              <i class="fa-solid fa-eye"></i>
+            </div>
+            <h3>Radical Salary Transparency</h3>
+            <p>Every single listing displays clear salary brackets upfront so candidates can make informed decisions without games.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-icon" style="background:var(--purple-light); color:var(--purple);">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3>Speed & Responsiveness</h3>
+            <p>Direct communication channels and automated status tracking eliminate the frustrating black-hole syndrome of legacy portals.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-icon" style="background:var(--success-light); color:var(--success);">
+              <i class="fa-solid fa-handshake"></i>
+            </div>
+            <h3>Equal Opportunity</h3>
+            <p>Our intelligent skills-first matching emphasizes demonstrated abilities and portfolio achievements over pedantic filters.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step-icon" style="background:var(--warning-light); color:var(--warning);">
+              <i class="fa-solid fa-shield-heart"></i>
+            </div>
+            <h3>Zero Ghost Jobs</h3>
+            <p>All postings are actively reviewed and verified with human recruiters to ensure every open application is authentic.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Leadership Team -->
+    <section class="section" style="background:var(--white);">
+      <div class="container">
+        <div class="section-title">
+          <span class="section-tag"><i class="fa-solid fa-users"></i> The People Behind CareerConnect</span>
+          <h2>Meet Our Leadership Team</h2>
+          <p>Builders, recruiters, and engineers passionate about the future of work</p>
+        </div>
+
+        <div class="companies-grid" style="grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));">
+          <div class="company-card">
+            <div class="testimonial-avatar" style="width:72px; height:72px; font-size:1.6rem; margin-bottom:1rem; background:linear-gradient(135deg, #2563eb, #3b82f6);">
+              EW
+            </div>
+            <h3>Elena Washington</h3>
+            <p style="color:var(--primary); font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">Co-Founder & CEO</p>
+            <p style="color:var(--slate-500); font-size:0.86rem; line-height:1.5;">Former VP of Talent at Stripe with 12+ years optimizing global engineering hiring pipelines.</p>
+          </div>
+
+          <div class="company-card">
+            <div class="testimonial-avatar" style="width:72px; height:72px; font-size:1.6rem; margin-bottom:1rem; background:linear-gradient(135deg, #7c3aed, #9333ea);">
+              MT
+            </div>
+            <h3>Marcus Tanaka</h3>
+            <p style="color:var(--purple); font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">Co-Founder & CTO</p>
+            <p style="color:var(--slate-500); font-size:0.86rem; line-height:1.5;">Ex-Principal Architect at Spotify; passionate about building fast, accessible web experiences.</p>
+          </div>
+
+          <div class="company-card">
+            <div class="testimonial-avatar" style="width:72px; height:72px; font-size:1.6rem; margin-bottom:1rem; background:linear-gradient(135deg, #059669, #10b981);">
+              AP
+            </div>
+            <h3>Amina Patel</h3>
+            <p style="color:var(--success); font-weight:600; font-size:0.9rem; margin-bottom:0.75rem;">Head of Product & Design</p>
+            <p style="color:var(--slate-500); font-size:0.86rem; line-height:1.5;">Award-winning product designer dedicated to crafting delightful, human-centric interfaces.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Join Call to Action -->
+    <section class="section" style="padding-top:1rem; padding-bottom:5rem;">
+      <div class="container">
+        <div class="cta-banner">
+          <h2>Become Part of the CareerConnect Journey</h2>
+          <p>Whether you're looking for your next breakthrough role or seeking top-tier talent to build the future.</p>
+          <div style="display:flex; justify-content:center; gap:1rem; flex-wrap:wrap;">
+            <a href="jobs.html" class="btn btn-lg" style="background:var(--white); color:var(--primary); font-weight:700;">Find Jobs</a>
+            <a href="contact.html" class="btn btn-lg btn-outline" style="border-color:rgba(255,255,255,0.4); color:var(--white); background:rgba(255,255,255,0.12);">Get in Touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none; padding-top:0;">
+        <div>&copy; 2026 CareerConnect Inc. All rights reserved.</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="index.html">Home</a>
+          <a href="jobs.html">Find Jobs</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

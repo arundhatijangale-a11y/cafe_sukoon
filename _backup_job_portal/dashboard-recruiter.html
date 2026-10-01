@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CareerConnect Recruiter Portal. Post new job listings, manage applications, and hire top talent.">
+  <title>Recruiter Dashboard | CareerConnect</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon" style="background:var(--accent-gradient);">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <span>Career<span class="highlight">Connect</span> <span class="badge badge-purple" style="font-size:0.75rem; vertical-align:middle;">Employer</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="jobs.html" class="nav-link">Find Jobs</a>
+        <a href="companies.html" class="nav-link">Companies</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="nav-user-account" style="display:flex; align-items:center; gap:0.6rem;">
+          <!-- Dynamically populated -->
+        </div>
+        <a href="dashboard-seeker.html" class="btn btn-outline btn-sm">
+          <i class="fa-solid fa-repeat"></i> Switch to Candidate View
+        </a>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
+  <div id="mobile-nav-drawer" class="mobile-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="jobs.html" class="nav-link">Find Jobs</a>
+    <a href="companies.html" class="nav-link">Companies</a>
+    <a href="about.html" class="nav-link">About Us</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <hr style="border:none; border-top:1px solid var(--slate-200); margin:0.5rem 0;">
+    <div style="display:flex; gap:0.75rem; flex-direction:column;">
+      <a href="dashboard-recruiter.html" class="btn btn-primary"><i class="fa-solid fa-building"></i> Recruiter Dashboard</a>
+      <a href="dashboard-seeker.html" class="btn btn-outline"><i class="fa-solid fa-user"></i> Seeker Dashboard</a>
+      <a href="login.html" class="btn btn-outline"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <div class="container dashboard-wrapper">
+
+      <!-- Recruiter Profile Header -->
+      <div class="dashboard-header">
+        <div class="dashboard-user-info">
+          <div class="dashboard-avatar" style="background:var(--accent-gradient);">
+            SJ
+          </div>
+          <div class="dashboard-user-details">
+            <div style="display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;">
+              <h1 id="recruiter-name">Sarah Jenkins</h1>
+              <span class="badge badge-purple"><i class="fa-solid fa-shield-check"></i> Verified Employer</span>
+            </div>
+            <p id="recruiter-title" style="font-weight:600; color:var(--slate-700); margin-bottom:0.4rem;">Head of Technical Talent</p>
+            <div style="display:flex; flex-wrap:wrap; gap:1.2rem; font-size:0.88rem; color:var(--slate-500);">
+              <span id="recruiter-company"><i class="fa-solid fa-building"></i> TechCorp Global & Partners</span>
+              <span id="recruiter-location"><i class="fa-solid fa-location-dot"></i> New York, NY</span>
+              <span id="recruiter-email"><i class="fa-solid fa-envelope"></i> sarah.jenkins@techcorp.io</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:0.75rem;">
+          <button class="btn btn-gradient" onclick="switchRecruiterTab('post')">
+            <i class="fa-solid fa-plus"></i> Post a New Job
+          </button>
+        </div>
+      </div>
+
+      <!-- Recruiter KPI Stats -->
+      <div class="dashboard-stats-grid">
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--primary-light); color:var(--primary);">
+            <i class="fa-solid fa-briefcase"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="rec-stat-jobs">24</h3>
+            <p>Active Postings</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--purple-light); color:var(--purple);">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="rec-stat-candidates">5</h3>
+            <p>Candidate Profiles</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--success-light); color:var(--success);">
+            <i class="fa-solid fa-user-check"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="rec-stat-shortlisted">2</h3>
+            <p>Shortlisted / Offers</p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon" style="background:var(--warning-light); color:var(--warning);">
+            <i class="fa-solid fa-video"></i>
+          </div>
+          <div class="metric-data">
+            <h3 id="rec-stat-interviews">1</h3>
+            <p>Interviews In Progress</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="dashboard-tabs">
+        <button class="tab-btn active" id="rec-tab-btn-manage" onclick="switchRecruiterTab('manage')">
+          <i class="fa-solid fa-list-ul"></i> Manage Job Listings
+        </button>
+        <button class="tab-btn" id="rec-tab-btn-post" onclick="switchRecruiterTab('post')">
+          <i class="fa-solid fa-circle-plus"></i> Post a Job
+        </button>
+        <button class="tab-btn" id="rec-tab-btn-applicants" onclick="switchRecruiterTab('applicants')">
+          <i class="fa-solid fa-user-group"></i> Review Candidates
+        </button>
+      </div>
+
+      <!-- Tab 1: Manage Job Listings -->
+      <div id="rec-tab-content-manage" class="tab-content active">
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Job Title & Location</th>
+                <th>Category</th>
+                <th>Salary Package</th>
+                <th>Applicants</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rec-jobs-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: Post a Job Form -->
+      <div id="rec-tab-content-post" class="tab-content">
+        <div style="background:var(--white); border:1px solid var(--slate-200); border-radius:var(--radius-xl); padding:2.5rem; max-width:850px; margin:0 auto; box-shadow:var(--shadow-sm);">
+          <div style="margin-bottom:2rem; padding-bottom:1.25rem; border-bottom:1px solid var(--slate-100);">
+            <h2 style="font-size:1.6rem; margin-bottom:0.4rem;">Publish a New Opportunity</h2>
+            <p style="color:var(--slate-500); font-size:0.95rem;">Reach over 120,000+ vetted software engineers, designers, and domain specialists.</p>
+          </div>
+
+          <form id="post-job-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Job Title *</label>
+                <input type="text" id="post-job-title" class="form-control" placeholder="e.g. Senior Frontend Architect" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Company Name *</label>
+                <input type="text" id="post-job-company" class="form-control" value="TechCorp Global" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Location *</label>
+                <input type="text" id="post-job-location" class="form-control" placeholder="e.g. Remote, or New York, NY" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Employment Type *</label>
+                <select id="post-job-type" class="form-control">
+                  <option value="Full-time">Full-time</option>
+                  <option value="Remote">Remote</option>
+                  <option value="Part-time">Part-time</option>
+                  <option value="Internship">Internship</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Job Category *</label>
+                <select id="post-job-category" class="form-control">
+                  <option value="Software & Tech">Software & Tech</option>
+                  <option value="Design & Creative">Design & Creative</option>
+                  <option value="Data & AI">Data & AI</option>
+                  <option value="Marketing & Sales">Marketing & Sales</option>
+                  <option value="Finance & Business">Finance & Business</option>
+                  <option value="Customer Support">Customer Support</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Experience Level *</label>
+                <select id="post-job-experience" class="form-control">
+                  <option value="Mid Level">Mid Level</option>
+                  <option value="Senior Level">Senior Level</option>
+                  <option value="Entry Level">Entry Level</option>
+                  <option value="Lead / Executive">Lead / Executive</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Salary Display Text *</label>
+                <input type="text" id="post-job-salary" class="form-control" placeholder="e.g. $130,000 - $160,000 / yr" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Filter Range (USD)</label>
+                <div style="display:flex; gap:0.5rem;">
+                  <input type="number" id="post-job-min-salary" class="form-control" placeholder="Min (120000)" value="120000" />
+                  <input type="number" id="post-job-max-salary" class="form-control" placeholder="Max (160000)" value="160000" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Job Overview & Description *</label>
+              <textarea id="post-job-desc" class="form-control" rows="3" placeholder="Provide a summary of the role, team dynamics, and vision..." required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Key Responsibilities (One per line)</label>
+              <textarea id="post-job-resp" class="form-control" rows="3" placeholder="Lead architecture reviews&#10;Implement core application features&#10;Mentor junior team members"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Requirements (One per line)</label>
+              <textarea id="post-job-reqs" class="form-control" rows="3" placeholder="4+ years professional software development&#10;Deep familiarity with modern frameworks&#10;Solid grasp of cloud environments"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Benefits & Perks (One per line)</label>
+              <textarea id="post-job-benefits" class="form-control" rows="2" placeholder="100% remote flexibility&#10;Comprehensive health & dental&#10;Annual learning budget"></textarea>
+            </div>
+
+            <div class="form-group" style="display:flex; align-items:center; gap:0.6rem; margin-top:1.5rem;">
+              <input type="checkbox" id="post-job-featured" style="width:18px; height:18px; accent-color:var(--primary);" />
+              <label for="post-job-featured" style="font-size:0.92rem; font-weight:600; cursor:pointer;">
+                Feature this job on the homepage and top of search results
+              </label>
+            </div>
+
+            <div style="margin-top:2rem; display:flex; gap:1rem; justify-content:flex-end;">
+              <button type="button" class="btn btn-outline" onclick="switchRecruiterTab('manage')">Cancel</button>
+              <button type="submit" class="btn btn-gradient btn-lg">
+                <i class="fa-solid fa-paper-plane"></i> Publish Job Listing
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 3: Candidates Review -->
+      <div id="rec-tab-content-applicants" class="tab-content">
+        <div style="background:var(--white); border:1px solid var(--slate-200); border-radius:var(--radius-lg); padding:1.5rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div>
+            <h3 style="font-size:1.2rem; margin-bottom:0.2rem;">Candidate Pipeline</h3>
+            <p style="color:var(--slate-500); font-size:0.88rem;">Review matching applicants and advance candidates through your hiring stages.</p>
+          </div>
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-sm btn-outline" onclick="showToast('Exported candidate data to CSV', 'info')">
+              <i class="fa-solid fa-download"></i> Export CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Applicant</th>
+                <th>Role Applied</th>
+                <th>Match Score</th>
+                <th>Resume</th>
+                <th>Stage / Status</th>
+              </tr>
+            </thead>
+            <tbody id="rec-candidates-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none; padding-top:0;">
+        <div>&copy; 2026 CareerConnect Employer Suite. Logged in as Recruiter Sarah Jenkins.</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="dashboard-seeker.html">Candidate Mode</a>
+          <a href="jobs.html">Live Postings</a>
+          <a href="contact.html">Employer Helpdesk</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/recruiter-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Search over 20+ top career opportunities with CareerConnect. Filter by remote, full-time, part-time, internship, salary range, and category.">
+  <title>Find Jobs | CareerConnect</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-briefcase"></i>
+        </div>
+        <span>Career<span class="highlight">Connect</span></span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="jobs.html" class="nav-link active">Find Jobs</a>
+        <a href="companies.html" class="nav-link">Companies</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div id="nav-user-account" style="display:flex; align-items:center; gap:0.6rem;">
+          <!-- Dynamically populated by setupNavbarUser() -->
+        </div>
+        <a href="login.html" class="btn btn-outline btn-sm">Login</a>
+        <a href="login.html?tab=signup" class="btn btn-gradient btn-sm">Sign Up</a>
+        <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle navigation">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div id="mobile-nav-overlay" class="mobile-nav-overlay" onclick="toggleMobileMenu()"></div>
+  <div id="mobile-nav-drawer" class="mobile-nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="jobs.html" class="nav-link active">Find Jobs</a>
+    <a href="companies.html" class="nav-link">Companies</a>
+    <a href="about.html" class="nav-link">About Us</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+    <hr style="border:none; border-top:1px solid var(--slate-200); margin:0.5rem 0;">
+    <div style="display:flex; gap:0.75rem; flex-direction:column;">
+      <a href="dashboard-seeker.html" class="btn btn-outline"><i class="fa-solid fa-user"></i> Seeker Dashboard</a>
+      <a href="dashboard-recruiter.html" class="btn btn-outline-purple"><i class="fa-solid fa-building"></i> Recruiter Dashboard</a>
+      <a href="login.html" class="btn btn-gradient"><i class="fa-solid fa-right-to-bracket"></i> Login / Register</a>
+    </div>
+  </div>
+
+  <main class="main-content">
+    <!-- Top Search Header -->
+    <div style="background: var(--hero-gradient); padding: 2.75rem 0 2rem; border-bottom: 1px solid var(--slate-200);">
+      <div class="container">
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Explore Opportunities</h1>
+        <p style="color: var(--slate-600); max-width: 600px; margin-bottom: 1.5rem;">
+          Find your next career role from verified global tech companies and startups. Use filters to narrow down your preferences.
+        </p>
+
+        <!-- Inline Quick Filters Bar -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <div class="input-icon-wrapper" style="flex: 1.5; min-width: 240px;">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="filter-keyword" class="form-control" placeholder="Search by job title, skill, or company..." />
+          </div>
+          <div class="input-icon-wrapper" style="flex: 1; min-width: 200px;">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" id="filter-location" class="form-control" placeholder="City, State or 'Remote'..." />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Layout: Sidebar + Listings -->
+    <div class="container">
+      <div class="jobs-page-layout">
+        
+        <!-- Filter Sidebar -->
+        <aside class="filter-sidebar">
+          <div class="filter-header">
+            <h3><i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Filter Jobs</h3>
+            <button onclick="clearAllFilters()" class="btn btn-sm btn-outline" style="font-size: 0.8rem; padding: 0.25rem 0.6rem;">
+              Clear All
+            </button>
+          </div>
+
+          <!-- Job Type Filter -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">Job Type</h4>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="type-filter" value="Full-time" />
+                <span>Full-time</span>
+              </div>
+              <span class="filter-count" data-count-type="Full-time">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="type-filter" value="Remote" />
+                <span>Remote</span>
+              </div>
+              <span class="filter-count" data-count-type="Remote">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="type-filter" value="Part-time" />
+                <span>Part-time</span>
+              </div>
+              <span class="filter-count" data-count-type="Part-time">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="type-filter" value="Internship" />
+                <span>Internship</span>
+              </div>
+              <span class="filter-count" data-count-type="Internship">0</span>
+            </label>
+          </div>
+
+          <!-- Job Category Filter -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">Category</h4>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Software & Tech" />
+                <span>Software & Tech</span>
+              </div>
+              <span class="filter-count" data-count-cat="Software & Tech">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Design & Creative" />
+                <span>Design & Creative</span>
+              </div>
+              <span class="filter-count" data-count-cat="Design & Creative">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Data & AI" />
+                <span>Data & AI</span>
+              </div>
+              <span class="filter-count" data-count-cat="Data & AI">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Marketing & Sales" />
+                <span>Marketing & Sales</span>
+              </div>
+              <span class="filter-count" data-count-cat="Marketing & Sales">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Finance & Business" />
+                <span>Finance & Business</span>
+              </div>
+              <span class="filter-count" data-count-cat="Finance & Business">0</span>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="cat-filter" value="Customer Support" />
+                <span>Customer Support</span>
+              </div>
+              <span class="filter-count" data-count-cat="Customer Support">0</span>
+            </label>
+          </div>
+
+          <!-- Experience Level Filter -->
+          <div class="filter-group">
+            <h4 class="filter-group-title">Experience Level</h4>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="exp-filter" value="Entry Level" />
+                <span>Entry Level</span>
+              </div>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="exp-filter" value="Mid Level" />
+                <span>Mid Level</span>
+              </div>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="exp-filter" value="Senior Level" />
+                <span>Senior Level</span>
+              </div>
+            </label>
+            <label class="filter-checkbox-label">
+              <div class="checkbox-left">
+                <input type="checkbox" name="exp-filter" value="Lead / Executive" />
+                <span>Lead / Executive</span>
+              </div>
+            </label>
+          </div>
+
+          <!-- Minimum Salary Slider -->
+          <div class="filter-group" style="margin-bottom:0.5rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <h4 class="filter-group-title" style="margin-bottom:0;">Minimum Salary</h4>
+              <span id="salary-range-val" style="font-weight:700; color:var(--primary); font-size:0.9rem;">$0k+</span>
+            </div>
+            <div class="range-slider-wrapper">
+              <input type="range" id="salary-range" min="0" max="200000" step="10000" value="0" />
+            </div>
+            <div class="range-values">
+              <span>$0</span>
+              <span>$100k</span>
+              <span>$200k+</span>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Listings Content Column -->
+        <section class="jobs-listings-column">
+          <!-- Results Header & Sort Controls -->
+          <div class="jobs-results-header">
+            <div class="results-count">
+              <h2 id="results-count-text">Showing 24 Available Jobs</h2>
+              <p>Verified openings with transparent compensation</p>
+            </div>
+
+            <div class="jobs-sort-wrapper">
+              <label for="jobs-sort-select" style="font-size:0.88rem; color:var(--slate-500); font-weight:600;">Sort By:</label>
+              <select id="jobs-sort-select" class="sort-select">
+                <option value="latest">Featured & Latest</option>
+                <option value="salary-high">Salary: High to Low</option>
+                <option value="salary-low">Salary: Low to High</option>
+                <option value="applicants">Most In-Demand</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Active Filter Chips -->
+          <div id="active-filter-chips" class="active-filters-chips">
+            <!-- Rendered by jobs.js -->
+          </div>
+
+          <!-- Job Cards Grid (Minimum 20 sample listings) -->
+          <div id="jobs-listings-grid" class="job-cards-grid" style="grid-template-columns: 1fr;">
+            <!-- Populated dynamically by jobs.js -->
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <a href="index.html" class="brand-logo">
+            <div class="brand-icon">
+              <i class="fa-solid fa-briefcase"></i>
+            </div>
+            <span>Career<span class="highlight" style="color:#60a5fa;">Connect</span></span>
+          </a>
+          <p>Connecting exceptional talent with world-class employers globally.</p>
+          <div class="footer-socials">
+            <a href="#" class="footer-social-icon" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+            <a href="#" class="footer-social-icon" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="footer-social-icon" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Job Categories</h4>
+          <div class="footer-links">
+            <a href="jobs.html?cat=Software%20%26%20Tech">Software & Tech</a>
+            <a href="jobs.html?cat=Design%20%26%20Creative">Design & Creative</a>
+            <a href="jobs.html?cat=Data%20%26%20AI">Data & AI</a>
+            <a href="jobs.html?cat=Marketing%20%26%20Sales">Marketing & Sales</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Portal Links</h4>
+          <div class="footer-links">
+            <a href="dashboard-seeker.html">Seeker Dashboard</a>
+            <a href="dashboard-recruiter.html">Recruiter Dashboard</a>
+            <a href="companies.html">Company Directory</a>
+            <a href="about.html">About CareerConnect</a>
+          </div>
+        </div>
+
+        <div class="footer-col footer-newsletter">
+          <h4>Job Alerts</h4>
+          <p>Get notified when matching roles are published.</p>
+          <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+            <input type="email" class="newsletter-input" placeholder="Your email..." required />
+            <button type="submit" class="btn btn-primary btn-sm">Subscribe</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 CareerConnect Inc. All rights reserved.</div>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact Support</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Core Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/jobs.js"></script>
+</body>
+</html>
