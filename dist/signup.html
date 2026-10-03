@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sign in or sign up to Café Sukoon — Your AI-powered personalized music sanctuary where coffee meets music.">
+  <meta name="description" content="Create your free account on Café Sukoon — Your AI-powered personalized music sanctuary where coffee meets music.">
   <meta name="theme-color" content="#16100c">
-  <title>Welcome Back — Café Sukoon</title>
+  <title>Create Free Account — Café Sukoon</title>
 
   <!-- Google Fonts: Outfit & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -111,18 +111,18 @@
       <div class="auth-card-container">
         <!-- Auth Tabs (Login / Sign Up) -->
         <div class="auth-nav-tabs" role="tablist">
-          <button class="auth-tab-btn active" id="tabLogin" role="tab" aria-selected="true" aria-controls="formLogin">
+          <button class="auth-tab-btn" id="tabLogin" role="tab" aria-selected="false" aria-controls="formLogin">
             Sign In
           </button>
-          <button class="auth-tab-btn" id="tabSignup" role="tab" aria-selected="false" aria-controls="formSignup">
+          <button class="auth-tab-btn active" id="tabSignup" role="tab" aria-selected="true" aria-controls="formSignup">
             Create Account
           </button>
         </div>
 
         <!-- Header Texts -->
         <div class="auth-heading-wrap">
-          <h1 class="auth-heading" id="authTitle">Welcome Back to Café Sukoon</h1>
-          <p class="auth-subheading" id="authSubtitle">Your coffee, your music, your little escape.</p>
+          <h1 class="auth-heading" id="authTitle">Join Café Sukoon Sanctuary</h1>
+          <p class="auth-subheading" id="authSubtitle">Create your account to sync your playlists and AI taste profile.</p>
         </div>
 
         <!-- Social / Google Sign-In -->
@@ -144,9 +144,9 @@
         <div class="auth-alert" id="authAlert" role="alert" style="display: none;"></div>
 
         <!-- =============================================================
-             1. LOGIN FORM
+             1. LOGIN FORM (Hidden by default on /signup)
              ============================================================= -->
-        <form class="auth-form" id="formLogin" novalidate>
+        <form class="auth-form" id="formLogin" style="display: none;" novalidate>
           <div class="form-group">
             <label class="form-label" for="loginEmail">Email Address</label>
             <div class="input-field-wrap">
@@ -187,9 +187,9 @@
         </form>
 
         <!-- =============================================================
-             2. SIGN UP FORM
+             2. SIGN UP FORM (Visible by default on /signup)
              ============================================================= -->
-        <form class="auth-form" id="formSignup" style="display: none;" novalidate>
+        <form class="auth-form" id="formSignup" style="display: block;" novalidate>
           <div class="form-group">
             <label class="form-label" for="signupName">Full Name</label>
             <div class="input-field-wrap">
@@ -248,8 +248,8 @@
 
         <!-- Footer switch text -->
         <div class="auth-footer-prompt">
-          <span id="authPromptText">Don't have an account yet?</span>
-          <button type="button" class="btn-link-action" id="btnToggleAuthMode">Sign Up Free</button>
+          <span id="authPromptText">Already have an account?</span>
+          <button type="button" class="btn-link-action" id="btnToggleAuthMode">Sign In</button>
         </div>
       </div>
     </div>

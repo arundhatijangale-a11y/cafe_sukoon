@@ -33,6 +33,7 @@ class CafeSukoonAIApp {
     this.startVisualizer();
     this.updateCounters();
     this.bindFocusMode();
+    this.bindMobileNav();
     this.checkOnboarding();
   }
 
@@ -45,18 +46,28 @@ class CafeSukoonAIApp {
     const avatarInit = document.getElementById('userAvatarInitial');
     const dropName = document.getElementById('dropdownUserName');
     const dropEmail = document.getElementById('dropdownUserEmail');
+    const mobLoggedOut = document.getElementById('mobNavAuthLoggedOut');
+    const mobLoggedIn = document.getElementById('mobNavAuthLoggedIn');
+    const mobAvatar = document.getElementById('mobUserAvatar');
+    const mobName = document.getElementById('mobUserName');
+    const mobEmail = document.getElementById('mobUserEmail');
 
-    const rawUser = localStorage.getItem('cafe_sukoon_user');
+    const rawUser = localStorage.getItem('cafe_sukoon_user') || sessionStorage.getItem('cafe_sukoon_user');
     if (rawUser) {
       try {
         const user = JSON.parse(rawUser);
         if (navAuth) navAuth.style.display = 'none';
         if (profileWrap) profileWrap.style.display = 'block';
+        if (mobLoggedOut) mobLoggedOut.style.display = 'none';
+        if (mobLoggedIn) mobLoggedIn.style.display = 'block';
 
         const displayName = user.name || user.email?.split('@')[0] || 'Coffee Lover';
         if (avatarInit) avatarInit.textContent = displayName.charAt(0).toUpperCase();
         if (dropName) dropName.textContent = displayName;
         if (dropEmail) dropEmail.textContent = user.email || 'user@cafesukoon.com';
+        if (mobAvatar) mobAvatar.textContent = displayName.charAt(0).toUpperCase();
+        if (mobName) mobName.textContent = displayName;
+        if (mobEmail) mobEmail.textContent = user.email || 'user@cafesukoon.com';
 
         // Restore saved account cloud preferences if available
         const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
@@ -74,6 +85,8 @@ class CafeSukoonAIApp {
     } else {
       if (navAuth) navAuth.style.display = 'flex';
       if (profileWrap) profileWrap.style.display = 'none';
+      if (mobLoggedOut) mobLoggedOut.style.display = 'flex';
+      if (mobLoggedIn) mobLoggedIn.style.display = 'none';
     }
 
     this.bindUserProfileMenu();
@@ -133,33 +146,162 @@ class CafeSukoonAIApp {
     }
 
     if (btnSignOut) {
-      btnSignOut.addEventListener('click', () => {
-        // Save current preferences to user's account before sign-out
-        const rawUser = localStorage.getItem('cafe_sukoon_user');
-        if (rawUser) {
-          try {
-            const user = JSON.parse(rawUser);
-            const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
-            if (accounts[user.email]) {
-              accounts[user.email].preferences = JSON.parse(localStorage.getItem('cafe_sukoon_ai_profile') || '{}');
-              accounts[user.email].savedPlaylists = JSON.parse(localStorage.getItem('cafe_sukoon_saved_playlists') || '[]');
-              localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
-            }
-          } catch(e) {}
+      btnSignOut.addEventListener('click', () => this.handleSignOut());
+    }
+  }
+
+  handleSignOut() {
+    const rawUser = localStorage.getItem('cafe_sukoon_user') || sessionStorage.getItem('cafe_sukoon_user');
+    if (rawUser) {
+      try {
+        const user = JSON.parse(rawUser);
+        const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
+        if (accounts[user.email]) {
+          accounts[user.email].preferences = JSON.parse(localStorage.getItem('cafe_sukoon_ai_profile') || '{}');
+          accounts[user.email].savedPlaylists = JSON.parse(localStorage.getItem('cafe_sukoon_saved_playlists') || '[]');
+          localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
         }
+      } catch(e) {}
+    }
 
-        localStorage.removeItem('cafe_sukoon_user');
-        localStorage.removeItem('cafe_sukoon_guest');
-        if (dropdownCard) dropdownCard.style.display = 'none';
+    localStorage.removeItem('cafe_sukoon_user');
+    sessionStorage.removeItem('cafe_sukoon_user');
+    localStorage.removeItem('cafe_sukoon_guest');
+    
+    const dropdownCard = document.getElementById('profileDropdownCard');
+    if (dropdownCard) dropdownCard.style.display = 'none';
 
-        const navAuth = document.getElementById('navAuthGroup');
-        const profileWrap = document.getElementById('userProfileMenuWrap');
-        if (navAuth) navAuth.style.display = 'flex';
-        if (profileWrap) profileWrap.style.display = 'none';
+    const navAuth = document.getElementById('navAuthGroup');
+    const profileWrap = document.getElementById('userProfileMenuWrap');
+    if (navAuth) navAuth.style.display = 'flex';
+    if (profileWrap) profileWrap.style.display = 'none';
 
-        this.showToast('Signed out of Café Sukoon 👋');
+    const mobLoggedOut = document.getElementById('mobNavAuthLoggedOut');
+    const mobLoggedIn = document.getElementById('mobNavAuthLoggedIn');
+    if (mobLoggedOut) mobLoggedOut.style.display = 'flex';
+    if (mobLoggedIn) mobLoggedIn.style.display = 'none';
+
+    this.showToast('Signed out of Café Sukoon 👋');
+  }
+
+  // =================================================================
+  // MOBILE NAVIGATION DRAWER
+  // =================================================================
+  bindMobileNav() {
+    const toggleBtn = document.getElementById('btnMobileNavToggle');
+    const closeBtn = document.getElementById('btnMobileNavClose');
+    const drawer = document.getElementById('mobileNavDrawer');
+    const backdrop = document.getElementById('mobileNavBackdrop');
+    const linkHome = document.getElementById('mobNavLinkHome');
+    const linkShowcase = document.getElementById('mobNavLinkShowcase');
+    const btnTuneTaste = document.getElementById('mobBtnTuneTaste');
+    const btnFocus = document.getElementById('mobBtnFocusMode');
+    const menuLiked = document.getElementById('mobMenuLiked');
+    const menuSaved = document.getElementById('mobMenuSaved');
+    const mobSignOut = document.getElementById('mobBtnSignOut');
+
+    const openDrawer = () => {
+      if (!drawer) return;
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      if (toggleBtn) {
+        toggleBtn.classList.add('active');
+        toggleBtn.setAttribute('aria-expanded', 'true');
+      }
+      document.body.classList.add('mobile-nav-active');
+    };
+
+    const closeDrawer = () => {
+      if (!drawer) return;
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      if (toggleBtn) {
+        toggleBtn.classList.remove('active');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+      }
+      document.body.classList.remove('mobile-nav-active');
+    };
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (drawer && drawer.classList.contains('open')) {
+          closeDrawer();
+        } else {
+          openDrawer();
+        }
       });
     }
+
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    if (linkHome) {
+      linkHome.addEventListener('click', () => {
+        closeDrawer();
+        document.getElementById('home')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (linkShowcase) {
+      linkShowcase.addEventListener('click', () => {
+        closeDrawer();
+        document.getElementById('showcaseSection')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (btnTuneTaste) {
+      btnTuneTaste.addEventListener('click', () => {
+        closeDrawer();
+        const modal = document.getElementById('aiPreferencesModal');
+        if (modal) {
+          modal.classList.add('open');
+          this.populateModalFromProfile();
+        }
+      });
+    }
+
+    if (btnFocus) {
+      btnFocus.addEventListener('click', () => {
+        closeDrawer();
+        if (this.isFocusMode) {
+          this.exitFocusMode();
+        } else {
+          this.enterFocusMode();
+        }
+      });
+    }
+
+    if (menuLiked) {
+      menuLiked.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeDrawer();
+        this.switchTab('liked');
+        document.getElementById('showcaseSection')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (menuSaved) {
+      menuSaved.addEventListener('click', (e) => {
+        e.preventDefault();
+        closeDrawer();
+        this.switchTab('saved');
+        document.getElementById('showcaseSection')?.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (mobSignOut) {
+      mobSignOut.addEventListener('click', () => {
+        closeDrawer();
+        this.handleSignOut();
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
   }
 
   // =================================================================
@@ -264,7 +406,7 @@ class CafeSukoonAIApp {
     }
 
     listBody.innerHTML = playlists.map((pl, idx) => `
-      <div class="track-row" style="grid-template-columns: 36px 48px 1fr 140px 100px 90px;">
+      <div class="track-row track-row-saved">
         <div class="track-col-index">
           <span class="track-num">${(idx + 1).toString().padStart(2, '0')}</span>
         </div>

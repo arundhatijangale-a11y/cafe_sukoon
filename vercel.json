@@ -7,7 +7,8 @@
   "rewrites": [
     { "source": "/login", "destination": "/login.html" },
     { "source": "/signin", "destination": "/login.html" },
-    { "source": "/signup", "destination": "/login.html?mode=signup" }
+    { "source": "/signup", "destination": "/signup.html" },
+    { "source": "/register", "destination": "/signup.html" }
   ],
   "headers": [
     {

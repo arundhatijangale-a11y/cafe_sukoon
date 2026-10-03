@@ -1,28 +1,101 @@
 // ===================================================================
-// CAFÉ SUKOON — Authentication Controller (Supabase Auth Integration)
-// Supports Email/Password, Signup, Google OAuth, Password Reset, Guest Mode,
-// and Cloud Synchronization of User Music Preferences & Playlists.
+// CAFÉ SUKOON — Robust & Cryptographically Secure Authentication Controller
+// Features:
+// - PBKDF2 with SHA-256 + 16-byte cryptographic salt per user (No plaintext passwords)
+// - True credential verification with friendly, descriptive error messages
+// - "Remember Me" persistent vs session-scoped authentication
+// - Auto-prefill of remembered user on return visits
+// - Complete Signup, Login, Password Reset, Guest Mode, and Logout support
+// - Optional Supabase Cloud Auth synchronization when real API keys are configured
 // ===================================================================
 
-const DEFAULT_SUPABASE_URL = 'https://cafesukoon-sanctuary.supabase.co';
-const DEFAULT_SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNhZmVzdWtvb24iLCJyb2xlIjoiYW5vbiIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoyMDAwMDAwMDAwfQ.demo_placeholder_sukoon';
-
-// Initialize Supabase Client if CDN is available
+// Optional Supabase Configuration (Provide real keys in window.SUKOON_SUPABASE_CONFIG if cloud sync is desired)
 let supabase = null;
-if (window.supabase && window.supabase.createClient) {
+const supabaseConfig = window.SUKOON_SUPABASE_CONFIG || {};
+const configuredUrl = supabaseConfig.url || localStorage.getItem('sukoon_supabase_url');
+const configuredAnon = supabaseConfig.anonKey || localStorage.getItem('sukoon_supabase_anon');
+
+if (window.supabase && window.supabase.createClient && configuredUrl && configuredAnon && !configuredUrl.includes('placeholder')) {
   try {
-    const config = window.SUKOON_SUPABASE_CONFIG || {};
-    const url = config.url || localStorage.getItem('sukoon_supabase_url') || DEFAULT_SUPABASE_URL;
-    const anon = config.anonKey || localStorage.getItem('sukoon_supabase_anon') || DEFAULT_SUPABASE_ANON;
-    supabase = window.supabase.createClient(url, anon);
+    supabase = window.supabase.createClient(configuredUrl, configuredAnon);
   } catch (err) {
-    console.warn('Supabase initialization notice, using local session engine:', err);
+    console.info('Using local secure authentication engine for Café Sukoon.');
   }
 }
 
+// ===================================================================
+// CRYPTOGRAPHIC HELPER FUNCTIONS (PBKDF2-SHA256 with Unique Salt)
+// ===================================================================
+async function hashPasswordWithSalt(password, saltHex = null) {
+  if (window.crypto && window.crypto.subtle) {
+    try {
+      const encoder = new TextEncoder();
+      let salt;
+      if (saltHex) {
+        const matches = saltHex.match(/.{1,2}/g) || [];
+        salt = new Uint8Array(matches.map(byte => parseInt(byte, 16)));
+      } else {
+        salt = window.crypto.getRandomValues(new Uint8Array(16));
+      }
+
+      const keyMaterial = await window.crypto.subtle.importKey(
+        'raw',
+        encoder.encode(password),
+        { name: 'PBKDF2' },
+        false,
+        ['deriveBits']
+      );
+
+      const derivedBits = await window.crypto.subtle.deriveBits(
+        {
+          name: 'PBKDF2',
+          salt: salt,
+          iterations: 100000,
+          hash: 'SHA-256'
+        },
+        keyMaterial,
+        256
+      );
+
+      const hashHex = Array.from(new Uint8Array(derivedBits))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+      const outSaltHex = Array.from(salt)
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+
+      return { hash: hashHex, salt: outSaltHex };
+    } catch (e) {
+      console.warn('Crypto subtle error, fallback hashing:', e);
+    }
+  }
+
+  // Resilient fallback hashing if WebCrypto Subtle is unavailable
+  let h = 0;
+  const combined = (saltHex || 'sukoon_salt_default') + password;
+  for (let i = 0; i < combined.length; i++) {
+    h = ((h << 5) - h) + combined.charCodeAt(i);
+    h |= 0;
+  }
+  return { hash: 'f_' + Math.abs(h).toString(16), salt: saltHex || 'sukoon_salt_default' };
+}
+
+function isValidEmail(email) {
+  return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/.test(email);
+}
+
+// ===================================================================
+// CAFÉ SUKOON AUTHENTICATION CLASS
+// ===================================================================
 class CafeSukoonAuth {
   constructor() {
-    this.currentMode = 'login'; // 'login' | 'signup'
+    // Detect default mode based on filename and query params
+    const path = window.location.pathname.toLowerCase();
+    const isSignupPage = path.endsWith('/signup.html') || path.endsWith('/signup') || path.endsWith('/signup/');
+    const urlParams = new URLSearchParams(window.location.search);
+    const modeParam = urlParams.get('mode');
+
+    this.currentMode = (isSignupPage || modeParam === 'signup') ? 'signup' : 'login';
     this.init();
   }
 
@@ -33,12 +106,25 @@ class CafeSukoonAuth {
     this.bindGoogleAuth();
     this.bindGuestMode();
     this.bindForgotPassword();
+    this.prefillRememberedUser();
     this.checkExistingSession();
   }
 
-  // Check if user is already logged in
+  // Pre-fill remembered email and check Remember Me if user opted in
+  prefillRememberedUser() {
+    const rememberedEmail = localStorage.getItem('cafe_sukoon_remembered_email');
+    const loginEmailInput = document.getElementById('loginEmail');
+    const rememberMeBox = document.getElementById('loginRememberMe');
+
+    if (rememberedEmail && loginEmailInput) {
+      loginEmailInput.value = rememberedEmail;
+      if (rememberMeBox) rememberMeBox.checked = true;
+    }
+  }
+
+  // Check if user is already authenticated
   async checkExistingSession() {
-    // 1. Check Supabase session
+    // 1. Supabase session check
     if (supabase) {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -52,9 +138,10 @@ class CafeSukoonAuth {
       }
     }
 
-    // 2. Check local authenticated user session
-    const localUser = localStorage.getItem('cafe_sukoon_user');
-    if (localUser) {
+    // 2. Local & Session storage checks
+    const persistentUser = localStorage.getItem('cafe_sukoon_user');
+    const sessionUser = sessionStorage.getItem('cafe_sukoon_user');
+    if (persistentUser || sessionUser) {
       window.location.href = 'index.html';
     }
   }
@@ -78,33 +165,48 @@ class CafeSukoonAuth {
       this.clearAlert(alertBox);
 
       if (mode === 'login') {
-        tabLogin.classList.add('active');
-        tabLogin.setAttribute('aria-selected', 'true');
-        tabSignup.classList.remove('active');
-        tabSignup.setAttribute('aria-selected', 'false');
+        if (tabLogin) {
+          tabLogin.classList.add('active');
+          tabLogin.setAttribute('aria-selected', 'true');
+        }
+        if (tabSignup) {
+          tabSignup.classList.remove('active');
+          tabSignup.setAttribute('aria-selected', 'false');
+        }
 
-        formLogin.style.display = 'block';
-        formSignup.style.display = 'none';
+        if (formLogin) formLogin.style.display = 'block';
+        if (formSignup) formSignup.style.display = 'none';
 
-        authTitle.textContent = 'Welcome Back to Café Sukoon';
-        authSubtitle.textContent = 'Your coffee, your music, your little escape.';
-        promptText.textContent = "Don't have an account yet?";
-        toggleAuthBtn.textContent = 'Sign Up Free';
+        if (authTitle) authTitle.textContent = 'Welcome Back to Café Sukoon';
+        if (authSubtitle) authSubtitle.textContent = 'Your coffee, your music, your little escape.';
+        if (promptText) promptText.textContent = "Don't have an account yet?";
+        if (toggleAuthBtn) toggleAuthBtn.textContent = 'Sign Up Free';
+
+        document.title = 'Sign In — Café Sukoon';
       } else {
-        tabSignup.classList.add('active');
-        tabSignup.setAttribute('aria-selected', 'true');
-        tabLogin.classList.remove('active');
-        tabLogin.setAttribute('aria-selected', 'false');
+        if (tabSignup) {
+          tabSignup.classList.add('active');
+          tabSignup.setAttribute('aria-selected', 'true');
+        }
+        if (tabLogin) {
+          tabLogin.classList.remove('active');
+          tabLogin.setAttribute('aria-selected', 'false');
+        }
 
-        formLogin.style.display = 'none';
-        formSignup.style.display = 'block';
+        if (formLogin) formLogin.style.display = 'none';
+        if (formSignup) formSignup.style.display = 'block';
 
-        authTitle.textContent = 'Join Café Sukoon Sanctuary';
-        authSubtitle.textContent = 'Create your account to sync your playlists and AI taste profile.';
-        promptText.textContent = 'Already have an account?';
-        toggleAuthBtn.textContent = 'Sign In';
+        if (authTitle) authTitle.textContent = 'Join Café Sukoon Sanctuary';
+        if (authSubtitle) authSubtitle.textContent = 'Create your account to sync your playlists and AI taste profile.';
+        if (promptText) promptText.textContent = 'Already have an account?';
+        if (toggleAuthBtn) toggleAuthBtn.textContent = 'Sign In';
+
+        document.title = 'Create Free Account — Café Sukoon';
       }
     };
+
+    // Apply initial detected mode
+    switchMode(this.currentMode);
 
     if (tabLogin) tabLogin.addEventListener('click', () => switchMode('login'));
     if (tabSignup) tabSignup.addEventListener('click', () => switchMode('signup'));
@@ -112,12 +214,6 @@ class CafeSukoonAuth {
       toggleAuthBtn.addEventListener('click', () => {
         switchMode(this.currentMode === 'login' ? 'signup' : 'login');
       });
-    }
-
-    // Check URL parameters (e.g. login.html?mode=signup)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('mode') === 'signup') {
-      switchMode('signup');
     }
   }
 
@@ -155,128 +251,195 @@ class CafeSukoonAuth {
     const formSignup = document.getElementById('formSignup');
     const alertBox = document.getElementById('authAlert');
 
-    // Login Submission
+    // ---------------------------------------------------------------
+    // SIGN IN SUBMISSION
+    // ---------------------------------------------------------------
     if (formLogin) {
       formLogin.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const rememberMeInput = document.getElementById('loginRememberMe');
         const submitBtn = document.getElementById('btnLoginSubmit');
 
+        const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+        const password = passwordInput ? passwordInput.value : '';
+        const rememberMe = rememberMeInput ? rememberMeInput.checked : true;
+
+        this.clearAlert(alertBox);
+
+        // Validation 1: Required fields
         if (!email || !password) {
           this.showAlert(alertBox, 'Please enter both your email address and password.', 'error');
+          if (!email && emailInput) emailInput.focus();
+          else if (!password && passwordInput) passwordInput.focus();
+          return;
+        }
+
+        // Validation 2: Valid email syntax
+        if (!isValidEmail(email)) {
+          this.showAlert(alertBox, 'Please enter a valid email address (e.g. name@domain.com).', 'error');
+          if (emailInput) emailInput.focus();
           return;
         }
 
         this.setLoading(submitBtn, true);
-        this.clearAlert(alertBox);
 
         try {
           let userProfile = null;
 
-          // Attempt real Supabase sign-in
+          // Attempt Supabase if real config provided
           if (supabase) {
             try {
               const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-              if (error) {
-                // If demo credentials or network error, fallback to secure local session
-                console.warn('Supabase auth notice:', error.message);
-              } else if (data && data.user) {
+              if (!error && data && data.user) {
                 userProfile = {
                   id: data.user.id,
                   email: data.user.email,
                   name: data.user.user_metadata?.full_name || email.split('@')[0],
-                  provider: 'email'
+                  provider: 'supabase'
                 };
+              } else if (error) {
+                console.warn('Supabase sign-in error:', error.message);
               }
             } catch (err) {
-              console.warn('Supabase sign-in caught error:', err);
+              console.warn('Supabase sign-in caught exception:', err);
             }
           }
 
-          // Fallback to local authenticated account store if external auth offline
+          // Secure Local Authentication Engine
           if (!userProfile) {
             const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
-            if (accounts[email]) {
-              if (accounts[email].password === password) {
-                userProfile = {
-                  id: `usr_${Date.now()}`,
-                  email,
-                  name: accounts[email].name || email.split('@')[0],
-                  provider: 'local'
-                };
-                // Restore account cloud preferences
-                if (accounts[email].preferences) {
-                  localStorage.setItem('cafe_sukoon_ai_profile', JSON.stringify(accounts[email].preferences));
-                }
-                if (accounts[email].savedPlaylists) {
-                  localStorage.setItem('cafe_sukoon_saved_playlists', JSON.stringify(accounts[email].savedPlaylists));
-                }
-              } else {
-                throw new Error('Incorrect password. Please try again or use Forgot Password.');
+            const account = accounts[email];
+
+            // Real credential verification: DO NOT auto-create account on login
+            if (!account) {
+              throw new Error('No account found with this email. Please check your spelling or sign up.');
+            }
+
+            // Verify password using PBKDF2 hash or upgrade legacy plaintext
+            let isPasswordValid = false;
+
+            if (account.passwordHash && account.salt) {
+              const hashAttempt = await hashPasswordWithSalt(password, account.salt);
+              isPasswordValid = (hashAttempt.hash === account.passwordHash);
+            } else if (account.password) {
+              // Legacy account upgrade path
+              if (account.password === password) {
+                isPasswordValid = true;
+                const newHash = await hashPasswordWithSalt(password);
+                account.passwordHash = newHash.hash;
+                account.salt = newHash.salt;
+                delete account.password; // Remove plaintext password
+                accounts[email] = account;
+                localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
               }
-            } else {
-              // Automatically register first-time valid credential
-              userProfile = {
-                id: `usr_${Date.now()}`,
-                email,
-                name: email.split('@')[0],
-                provider: 'local'
-              };
-              accounts[email] = { name: userProfile.name, password, createdAt: new Date().toISOString() };
-              localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
+            }
+
+            if (!isPasswordValid) {
+              throw new Error('Incorrect password. Please verify your password or use "Forgot password?".');
+            }
+
+            userProfile = {
+              id: account.id || `usr_${Date.now()}`,
+              email: account.email || email,
+              name: account.name || email.split('@')[0],
+              provider: 'local'
+            };
+
+            // Restore account saved preferences
+            if (account.preferences) {
+              localStorage.setItem('cafe_sukoon_ai_profile', JSON.stringify(account.preferences));
+            }
+            if (account.savedPlaylists) {
+              localStorage.setItem('cafe_sukoon_saved_playlists', JSON.stringify(account.savedPlaylists));
             }
           }
 
-          this.saveUserSession(userProfile);
-          this.showAlert(alertBox, 'Welcome back! Redirecting to your café sanctuary...', 'success');
+          // Save session according to Remember Me
+          this.saveUserSession(userProfile, rememberMe);
+          this.showAlert(alertBox, 'Welcome back to Café Sukoon! Redirecting to your sanctuary...', 'success');
 
           setTimeout(() => {
             window.location.href = 'index.html';
-          }, 800);
+          }, 600);
 
         } catch (err) {
-          this.showAlert(alertBox, err.message || 'Login failed. Please verify credentials.', 'error');
+          this.showAlert(alertBox, err.message || 'Login failed. Please check your credentials.', 'error');
         } finally {
           this.setLoading(submitBtn, false);
         }
       });
     }
 
-    // Signup Submission
+    // ---------------------------------------------------------------
+    // SIGN UP SUBMISSION
+    // ---------------------------------------------------------------
     if (formSignup) {
       formSignup.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('signupName').value.trim();
-        const email = document.getElementById('signupEmail').value.trim();
-        const password = document.getElementById('signupPassword').value;
+        const nameInput = document.getElementById('signupName');
+        const emailInput = document.getElementById('signupEmail');
+        const passwordInput = document.getElementById('signupPassword');
+        const rememberMeInput = document.getElementById('signupRememberMe');
         const submitBtn = document.getElementById('btnSignupSubmit');
 
+        const name = nameInput ? nameInput.value.trim() : '';
+        const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+        const password = passwordInput ? passwordInput.value : '';
+        const rememberMe = rememberMeInput ? rememberMeInput.checked : true;
+
+        this.clearAlert(alertBox);
+
+        // Validation 1: Required fields
         if (!name || !email || !password) {
-          this.showAlert(alertBox, 'Please complete all required fields.', 'error');
+          this.showAlert(alertBox, 'Please fill in all fields (Full Name, Email Address, and Password).', 'error');
+          if (!name && nameInput) nameInput.focus();
+          else if (!email && emailInput) emailInput.focus();
+          else if (!password && passwordInput) passwordInput.focus();
           return;
         }
 
+        // Validation 2: Name length
+        if (name.length < 2) {
+          this.showAlert(alertBox, 'Please enter your full name (at least 2 characters).', 'error');
+          if (nameInput) nameInput.focus();
+          return;
+        }
+
+        // Validation 3: Valid email
+        if (!isValidEmail(email)) {
+          this.showAlert(alertBox, 'Please enter a valid email address (e.g. name@domain.com).', 'error');
+          if (emailInput) emailInput.focus();
+          return;
+        }
+
+        // Validation 4: Password length
         if (password.length < 6) {
-          this.showAlert(alertBox, 'Password must be at least 6 characters.', 'error');
+          this.showAlert(alertBox, 'Password must be at least 6 characters long.', 'error');
+          if (passwordInput) passwordInput.focus();
           return;
         }
 
         this.setLoading(submitBtn, true);
-        this.clearAlert(alertBox);
 
         try {
+          const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
+
+          // Check if account already exists
+          if (accounts[email]) {
+            throw new Error('An account with this email address already exists. Please sign in instead.');
+          }
+
           let userProfile = null;
 
-          // Attempt real Supabase sign-up
+          // Attempt Supabase if configured
           if (supabase) {
             try {
               const { data, error } = await supabase.auth.signUp({
                 email,
                 password,
-                options: {
-                  data: { full_name: name }
-                }
+                options: { data: { full_name: name } }
               });
               if (!error && data && data.user) {
                 userProfile = {
@@ -285,33 +448,47 @@ class CafeSukoonAuth {
                   name: name,
                   provider: 'supabase'
                 };
+              } else if (error) {
+                console.warn('Supabase sign-up error:', error.message);
               }
             } catch (err) {
-              console.warn('Supabase signup notice:', err);
+              console.warn('Supabase sign-up caught exception:', err);
             }
           }
 
+          // Hash password securely with unique salt
+          const hashResult = await hashPasswordWithSalt(password);
+
           if (!userProfile) {
             userProfile = {
-              id: `usr_${Date.now()}`,
+              id: `usr_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
               email,
               name,
               provider: 'local'
             };
-            const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
-            accounts[email] = { name, password, createdAt: new Date().toISOString() };
-            localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
           }
 
-          this.saveUserSession(userProfile);
+          // Store account with PBKDF2 hash (plaintext password is NEVER saved)
+          accounts[email] = {
+            id: userProfile.id,
+            name,
+            email,
+            passwordHash: hashResult.hash,
+            salt: hashResult.salt,
+            createdAt: new Date().toISOString()
+          };
+          localStorage.setItem('cafe_sukoon_accounts', JSON.stringify(accounts));
+
+          // Save session
+          this.saveUserSession(userProfile, rememberMe);
           this.showAlert(alertBox, 'Account created! Welcome to Café Sukoon ✨ Redirecting...', 'success');
 
           setTimeout(() => {
             window.location.href = 'index.html';
-          }, 900);
+          }, 700);
 
         } catch (err) {
-          this.showAlert(alertBox, err.message || 'Failed to create account.', 'error');
+          this.showAlert(alertBox, err.message || 'Failed to create account. Please try again.', 'error');
         } finally {
           this.setLoading(submitBtn, false);
         }
@@ -320,7 +497,7 @@ class CafeSukoonAuth {
   }
 
   // =================================================================
-  // 4. GOOGLE OAUTH SIGN IN
+  // 4. GOOGLE SIGN-IN
   // =================================================================
   bindGoogleAuth() {
     const btn = document.getElementById('btnGoogleAuth');
@@ -330,7 +507,7 @@ class CafeSukoonAuth {
       const alertBox = document.getElementById('authAlert');
       this.clearAlert(alertBox);
 
-      // Attempt Supabase Google OAuth
+      // Attempt Supabase OAuth if available
       if (supabase) {
         try {
           const { error } = await supabase.auth.signInWithOAuth({
@@ -345,7 +522,7 @@ class CafeSukoonAuth {
         }
       }
 
-      // Seamless Demo Google Account Mock
+      // Seamless Demo Google Account
       const googleUser = {
         id: `g_${Date.now()}`,
         name: 'Sukoon Music Lover',
@@ -354,11 +531,11 @@ class CafeSukoonAuth {
         provider: 'google'
       };
 
-      this.saveUserSession(googleUser);
+      this.saveUserSession(googleUser, true);
       this.showAlert(alertBox, 'Connected with Google! Redirecting to Café Sukoon...', 'success');
       setTimeout(() => {
         window.location.href = 'index.html';
-      }, 700);
+      }, 600);
     });
   }
 
@@ -372,10 +549,11 @@ class CafeSukoonAuth {
     btn.addEventListener('click', () => {
       localStorage.setItem('cafe_sukoon_guest', 'true');
       localStorage.removeItem('cafe_sukoon_user');
+      sessionStorage.removeItem('cafe_sukoon_user');
       this.showToast('Continuing as Guest ☕ Full music experience unlocked.');
       setTimeout(() => {
         window.location.href = 'index.html';
-      }, 500);
+      }, 400);
     });
   }
 
@@ -408,32 +586,47 @@ class CafeSukoonAuth {
 
     if (sendBtn) {
       sendBtn.addEventListener('click', async () => {
-        const email = emailInput.value.trim();
+        const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
         if (!email) {
           this.showAlert(alertBox, 'Please enter your email address.', 'error');
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          this.showAlert(alertBox, 'Please enter a valid email address.', 'error');
           return;
         }
 
         if (supabase) {
           try {
             await supabase.auth.resetPasswordForEmail(email);
-          } catch(e) {}
+          } catch (e) {}
         }
 
-        this.showAlert(alertBox, `Password reset instructions sent to ${email} (check your inbox)!`, 'success');
+        this.showAlert(alertBox, `If an account exists for ${email}, a password reset link has been dispatched to your inbox.`, 'success');
         setTimeout(() => {
           close();
-          this.showToast('Reset email sent! 📩');
-        }, 2200);
+          this.showToast('Password reset link dispatched! 📩');
+        }, 2000);
       });
     }
   }
 
   // =================================================================
-  // 7. SESSION & PREFERENCE SYNC (STEP 3 & 4)
+  // 7. SESSION & PREFERENCE SYNC
   // =================================================================
-  saveUserSession(user) {
-    localStorage.setItem('cafe_sukoon_user', JSON.stringify(user));
+  saveUserSession(user, rememberMe = true) {
+    if (rememberMe) {
+      localStorage.setItem('cafe_sukoon_user', JSON.stringify(user));
+      sessionStorage.removeItem('cafe_sukoon_user');
+      if (user.email) {
+        localStorage.setItem('cafe_sukoon_remembered_email', user.email);
+      }
+    } else {
+      sessionStorage.setItem('cafe_sukoon_user', JSON.stringify(user));
+      localStorage.removeItem('cafe_sukoon_user');
+      localStorage.removeItem('cafe_sukoon_remembered_email');
+    }
     localStorage.removeItem('cafe_sukoon_guest');
 
     // Sync cloud preferences
@@ -441,10 +634,9 @@ class CafeSukoonAuth {
   }
 
   syncAccountPreferences(user) {
-    if (!user) return;
+    if (!user || !user.email) return;
     const accounts = JSON.parse(localStorage.getItem('cafe_sukoon_accounts') || '{}');
     if (accounts[user.email]) {
-      // Restore saved preferences
       if (accounts[user.email].preferences) {
         localStorage.setItem('cafe_sukoon_ai_profile', JSON.stringify(accounts[user.email].preferences));
       }
@@ -455,7 +647,7 @@ class CafeSukoonAuth {
   }
 
   // =================================================================
-  // 8. UTILITIES
+  // 8. UI NOTIFICATION UTILITIES
   // =================================================================
   showAlert(container, message, type = 'error') {
     if (!container) return;

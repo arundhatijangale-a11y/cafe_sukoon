@@ -25,7 +25,8 @@ const MIME = {
 const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
-  if (reqPath === '/login' || reqPath === '/signin' || reqPath === '/signup') reqPath = '/login.html';
+  if (reqPath === '/login' || reqPath === '/signin' || reqPath === '/login/' || reqPath === '/signin/') reqPath = '/login.html';
+  if (reqPath === '/signup' || reqPath === '/register' || reqPath === '/signup/' || reqPath === '/register/') reqPath = '/signup.html';
   const filePath = path.join(__dirname, reqPath);
 
   // Security check: prevent directory traversal

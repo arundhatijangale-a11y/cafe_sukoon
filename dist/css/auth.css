@@ -17,7 +17,8 @@
   display: grid;
   grid-template-columns: 1.05fr 1fr;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
+  max-width: 100%;
   position: relative;
 }
 
@@ -634,6 +635,76 @@
   fill: currentColor;
 }
 
+/* Form Options Row (Remember Me & Forgot Password) */
+.form-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.custom-checkbox-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 0.84rem;
+  color: var(--warm-crema, #f5eee6);
+}
+
+.custom-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.custom-checkbox-box {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-glass-bright, rgba(255, 255, 255, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+  color: #140f0c;
+  flex-shrink: 0;
+}
+
+.custom-checkbox-box svg {
+  opacity: 0;
+  transform: scale(0.6);
+  transition: all 0.18s ease;
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box {
+  background: var(--gold-bright, #f3c87e);
+  border-color: var(--gold-bright, #f3c87e);
+  box-shadow: 0 0 10px rgba(243, 200, 126, 0.35);
+}
+
+.custom-checkbox-input:checked + .custom-checkbox-box svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.custom-checkbox-input:focus-visible + .custom-checkbox-box {
+  outline: 2px solid var(--gold-bright, #f3c87e);
+  outline-offset: 2px;
+}
+
+.checkbox-label-text {
+  font-size: 0.84rem;
+  color: var(--warm-crema, #f5eee6);
+  font-weight: 500;
+}
+
 /* Primary Submit Button */
 .btn-auth-primary {
   width: 100%;
@@ -817,6 +888,7 @@
   .auth-card-container {
     padding: 28px 20px;
     border-radius: 18px;
+    max-width: 100%;
   }
 
   .auth-heading {
@@ -827,5 +899,51 @@
   .btn-auth-primary,
   .btn-guest-action {
     font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-form-panel {
+    padding: 24px 14px 40px;
+  }
+
+  .auth-card-container {
+    padding: 22px 14px;
+    border-radius: 14px;
+  }
+
+  .auth-heading {
+    font-size: 1.35rem;
+  }
+
+  .auth-subheading {
+    font-size: 0.82rem;
+  }
+
+  .illustration-art-frame {
+    padding: 12px 16px;
+    gap: 16px;
+  }
+
+  .cafe-steaming-cup {
+    transform: scale(0.85);
+  }
+
+  .spinning-vinyl-record {
+    transform: scale(0.85);
+  }
+}
+
+@media (max-width: 330px) {
+  .auth-form-panel {
+    padding: 18px 8px 32px;
+  }
+
+  .auth-card-container {
+    padding: 18px 10px;
+  }
+
+  .auth-heading {
+    font-size: 1.25rem;
   }
 }

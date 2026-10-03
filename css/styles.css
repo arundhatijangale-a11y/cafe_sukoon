@@ -65,6 +65,9 @@
 html {
   scroll-behavior: smooth;
   color-scheme: dark;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -73,6 +76,8 @@ body {
   color: var(--warm-cream);
   line-height: 1.6;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
   overflow-x: hidden;
   position: relative;
   padding-bottom: calc(var(--player-height) + 36px);
@@ -84,10 +89,10 @@ body {
    =================================================================== */
 .video-bg-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   z-index: -2;
   overflow: hidden;
   pointer-events: none;
@@ -110,10 +115,10 @@ body {
 
 .video-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   z-index: -1;
   pointer-events: none;
   background: 
@@ -652,7 +657,9 @@ body {
 
 .search-wrapper {
   position: relative;
-  min-width: 260px;
+  flex: 1 1 240px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .search-input {
@@ -867,6 +874,10 @@ body {
   transition: all var(--trans-fast);
   cursor: pointer;
   color: var(--warm-crema);
+}
+
+.track-row.track-row-saved {
+  grid-template-columns: 36px 48px 1fr 140px 100px 90px;
 }
 
 .track-row:hover {
@@ -1384,17 +1395,18 @@ body {
    =================================================================== */
 .ai-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   background: rgba(10, 7, 5, 0.75);
   backdrop-filter: blur(12px);
   z-index: 2000;
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .ai-modal-backdrop.open {
@@ -1403,7 +1415,8 @@ body {
 
 .ai-modal-card {
   width: 100%;
-  max-width: 620px;
+  max-width: min(620px, 100%);
+  box-sizing: border-box;
   background: var(--bg-modal);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-lg);
@@ -1536,17 +1549,18 @@ body {
    =================================================================== */
 .save-modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   background: rgba(10, 7, 5, 0.75);
   backdrop-filter: blur(12px);
   z-index: 2000;
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 .save-modal-backdrop.open {
@@ -1555,7 +1569,8 @@ body {
 
 .save-modal-card {
   width: 100%;
-  max-width: 440px;
+  max-width: min(440px, 100%);
+  box-sizing: border-box;
   background: var(--bg-modal);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-lg);
@@ -1585,149 +1600,44 @@ body {
    =================================================================== */
 .toast-badge {
   position: fixed;
-  top: calc(var(--nav-height) + 16px);
-  right: 24px;
+  top: calc(var(--nav-height) + 14px);
+  left: 50%;
+  transform: translate(-50%, -20px);
+  max-width: min(calc(100% - 28px), 480px);
+  width: max-content;
   padding: 10px 20px;
-  background: rgba(26, 18, 14, 0.94);
+  background: rgba(26, 18, 14, 0.96);
   border: 1px solid var(--border-gold);
   border-radius: var(--radius-full);
   color: var(--warm-cream);
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 8px;
   backdrop-filter: blur(16px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-  transform: translateY(-20px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6);
   opacity: 0;
   pointer-events: none;
   transition: all var(--trans-fast);
-  z-index: 2100;
+  z-index: 1400;
+  box-sizing: border-box;
 }
 
 .toast-badge.show {
-  transform: translateY(0);
+  transform: translate(-50%, 0);
   opacity: 1;
 }
 
-/* ===================================================================
-   9. RESPONSIVE DESIGN
-   =================================================================== */
-@media (max-width: 992px) {
-  .spotify-floating-player {
-    grid-template-columns: 240px 1fr 180px;
-    height: 84px;
-    padding: 0 16px;
-  }
-
-  .visualizer-bars-row {
-    display: none;
-  }
-
-  .track-list-header-row,
-  .track-row {
-    grid-template-columns: 32px 44px 1fr 110px 110px;
-  }
-
-  .track-col-duration,
-  .th-col-duration {
-    display: none;
-  }
+/* Mobile Navigation Defaults (Desktop) */
+.mobile-nav-toggle {
+  display: none;
 }
 
-@media (max-width: 768px) {
-  .container {
-    padding: 0 20px;
-  }
-
-  .nav-links {
-    display: none;
-  }
-
-  .hero-section {
-    padding: 60px 0 40px;
-  }
-
-  .hero-heading {
-    font-size: 2.3rem;
-  }
-
-  .hero-cta-group {
-    flex-direction: column;
-    width: 100%;
-    max-width: 320px;
-  }
-
-  .btn-hero-primary,
-  .btn-hero-secondary {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .showcase-header {
-    padding: 24px 20px;
-  }
-
-  .vibe-cards-top {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .vibe-lang-pills {
-    justify-content: center;
-  }
-
-  .vibe-cards-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-open-full-quiz {
-    margin-left: 0;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .track-list-header-row {
-    display: none;
-  }
-
-  .track-list-container {
-    padding: 10px 12px 24px;
-  }
-
-  .track-row {
-    grid-template-columns: 28px 46px 1fr 80px;
-    padding: 8px 10px;
-  }
-
-  .track-col-score,
-  .track-col-duration {
-    display: none;
-  }
-
-  .spotify-floating-player {
-    grid-template-columns: 1fr 110px;
-    height: auto;
-    padding: 12px 16px;
-    bottom: 10px;
-  }
-
-  .player-controls-wrap {
-    grid-column: 1 / -1;
-    order: 3;
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  .player-right-wrap {
-    order: 2;
-  }
-
-  .volume-slider-spot {
-    width: 60px;
-  }
+.mobile-nav-drawer {
+  display: none;
 }
 
 /* ===================================================================
@@ -1865,4 +1775,1173 @@ body.focus-mode-active .save-modal-backdrop {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* ===================================================================
+   9. COMPREHENSIVE RESPONSIVE DESIGN (320px - 992px)
+   Containment in mobile viewport, zero overflow, responsive navbar,
+   clean vertical stacking, compact floating player, comfortable touch targets.
+   =================================================================== */
+
+/* Tablet & Smaller Laptops (<= 992px) */
+@media (max-width: 992px) {
+  :root {
+    --nav-height: 70px;
+    --player-height: 84px;
+  }
+
+  .container {
+    padding: 0 24px;
+  }
+
+  .spotify-floating-player {
+    grid-template-columns: 240px 1fr 180px;
+    height: 84px;
+    padding: 0 16px;
+  }
+
+  .visualizer-bars-row {
+    display: none;
+  }
+
+  .track-list-header-row,
+  .track-row {
+    grid-template-columns: 32px 44px 1fr 110px 110px;
+  }
+
+  .track-col-duration,
+  .th-col-duration {
+    display: none;
+  }
+}
+
+/* Tablets & Mobile Screens (<= 768px) */
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 64px;
+  }
+
+  body {
+    padding-bottom: 180px;
+  }
+
+  .container {
+    padding: 0 16px;
+    max-width: 100%;
+  }
+
+  /* -------------------------------------------------------------
+     A. RESPONSIVE NAVIGATION & MOBILE HAMBURGER DRAWER
+     ------------------------------------------------------------- */
+  .main-header {
+    height: var(--nav-height);
+  }
+
+  /* Hide desktop menu row completely */
+  .nav-links,
+  .nav-actions {
+    display: none !important;
+  }
+
+  /* Mobile Brand Logo */
+  .brand-logo {
+    font-size: 1.18rem;
+    gap: 9px;
+  }
+
+  .brand-cup-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .brand-cup-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Hamburger Menu Toggle Button */
+  .mobile-nav-toggle {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 42px;
+    height: 42px;
+    padding: 12px 10px;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-glass-bright);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all var(--trans-fast);
+    z-index: 101;
+  }
+
+  .mobile-nav-toggle:hover,
+  .mobile-nav-toggle:focus-visible,
+  .mobile-nav-toggle.active {
+    background: rgba(217, 119, 6, 0.22);
+    border-color: var(--border-gold);
+    outline: none;
+  }
+
+  .hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--warm-cream);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease, background 0.2s ease;
+  }
+
+  .mobile-nav-toggle.active .line-1 {
+    transform: translateY(6px) rotate(45deg);
+    background: var(--gold-bright);
+  }
+
+  .mobile-nav-toggle.active .line-2 {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .mobile-nav-toggle.active .line-3 {
+    transform: translateY(-8px) rotate(-45deg);
+    background: var(--gold-bright);
+  }
+
+  /* Slide-in Mobile Drawer */
+  .mobile-nav-drawer {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    transition: visibility 0.3s ease;
+  }
+
+  .mobile-nav-drawer.open {
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .mobile-nav-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 7, 5, 0.75);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-nav-drawer.open .mobile-nav-backdrop {
+    opacity: 1;
+  }
+
+  .mobile-nav-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: min(86vw, 360px);
+    height: 100%;
+    height: 100dvh;
+    background: #18110c;
+    border-left: 1px solid var(--border-gold);
+    box-shadow: -12px 0 45px rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    padding: 20px 18px 28px;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    z-index: 1;
+  }
+
+  .mobile-nav-drawer.open .mobile-nav-panel {
+    transform: translateX(0);
+  }
+
+  .mobile-nav-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 18px;
+  }
+
+  .mobile-nav-close {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--border-glass);
+    color: var(--warm-cream);
+    font-size: 1.6rem;
+    line-height: 1;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--trans-fast);
+  }
+
+  .mobile-nav-close:hover {
+    background: rgba(217, 119, 6, 0.25);
+    border-color: var(--border-gold);
+    color: var(--gold-bright);
+  }
+
+  .mobile-nav-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .mobile-nav-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gold-bright);
+    margin-bottom: 2px;
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--warm-cream);
+    text-decoration: none;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all var(--trans-fast);
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    background: rgba(217, 119, 6, 0.2);
+    border-color: var(--border-gold);
+    color: var(--gold-bright);
+  }
+
+  .mobile-nav-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .mobile-action-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-glass);
+    color: var(--warm-cream);
+    cursor: pointer;
+    text-align: left;
+    transition: all var(--trans-fast);
+  }
+
+  .mobile-action-card:hover {
+    background: rgba(217, 119, 6, 0.2);
+    border-color: var(--border-gold);
+    color: var(--gold-bright);
+  }
+
+  .mobile-action-card svg {
+    color: var(--gold-bright);
+    flex-shrink: 0;
+  }
+
+  .mobile-card-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-card-text strong {
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .mobile-card-text span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .mobile-auth-loggedout {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-mobile-auth-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border-glass-bright);
+    color: var(--warm-cream);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--trans-fast);
+  }
+
+  .btn-mobile-auth-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px;
+    border-radius: var(--radius-full);
+    background: var(--gold-bright);
+    color: #140f0c;
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(243, 200, 126, 0.35);
+    transition: all var(--trans-fast);
+  }
+
+  .mobile-user-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-glass);
+    margin-bottom: 8px;
+  }
+
+  .mobile-user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-bright), #b45309);
+    color: #140f0c;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mobile-user-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .mobile-user-name {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .mobile-user-email {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-user-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .mobile-user-link-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: none;
+    color: var(--warm-crema);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: left;
+    transition: all var(--trans-fast);
+  }
+
+  .mobile-user-link-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--gold-bright);
+  }
+
+  .mobile-user-link-item svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+  }
+
+  .mob-signout-btn {
+    color: #fca5a5 !important;
+  }
+
+  .mob-signout-btn:hover {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+  }
+
+  /* -------------------------------------------------------------
+     B. HERO SECTION
+     ------------------------------------------------------------- */
+  .hero-section {
+    padding: 50px 0 32px;
+  }
+
+  .hero-container {
+    max-width: 100%;
+  }
+
+  .hero-heading {
+    font-size: clamp(2rem, 6.2vw, 2.7rem);
+    letter-spacing: -0.8px;
+    line-height: 1.18;
+    margin-bottom: 14px;
+    word-break: break-word;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(0.92rem, 3.4vw, 1.05rem);
+    line-height: 1.5;
+    margin-bottom: 26px;
+    padding: 0 8px;
+    max-width: 100%;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    gap: 12px;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 24px;
+    font-size: 0.98rem;
+    box-sizing: border-box;
+  }
+
+  /* -------------------------------------------------------------
+     C. AI MUSIC SHOWCASE PANEL & ACTIONS
+     ------------------------------------------------------------- */
+  .showcase-section {
+    padding: 20px 0 50px;
+  }
+
+  .showcase-panel {
+    border-radius: var(--radius-md);
+  }
+
+  .showcase-header {
+    padding: 22px 16px 16px;
+  }
+
+  .showcase-top-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .showcase-title-area h2 {
+    font-size: clamp(1.3rem, 4.8vw, 1.6rem);
+    gap: 8px;
+    line-height: 1.25;
+  }
+
+  .showcase-title-area p {
+    font-size: 0.84rem;
+    margin-top: 3px;
+  }
+
+  .showcase-action-btns {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn-primary-action {
+    flex: 1 1 100%;
+    justify-content: center;
+    padding: 12px 20px;
+    font-size: 0.92rem;
+  }
+
+  .btn-glass-action {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+    padding: 10px 14px;
+    font-size: 0.84rem;
+  }
+
+  /* -------------------------------------------------------------
+     D. INTERACTIVE VIBE & PREFERENCE BAR
+     ------------------------------------------------------------- */
+  .interactive-vibe-section {
+    padding: 14px 12px;
+    margin-bottom: 14px;
+    gap: 12px;
+  }
+
+  .vibe-cards-top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .vibe-lang-pills {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .lang-pill {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 7px 10px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .btn-open-full-quiz {
+    width: 100%;
+    justify-content: center;
+    padding: 8px 16px;
+    font-size: 0.82rem;
+    margin-left: 0;
+  }
+
+  .vibe-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .vibe-card {
+    padding: 9px 10px;
+    gap: 9px;
+    border-radius: 10px;
+    min-width: 0;
+  }
+
+  .vibe-card-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 1.15rem;
+    border-radius: 8px;
+  }
+
+  .vibe-card-info {
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .vibe-card-title {
+    font-size: 0.82rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .vibe-card-subtitle {
+    font-size: 0.68rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* -------------------------------------------------------------
+     E. FILTER TOOLBAR & SEARCH BAR
+     ------------------------------------------------------------- */
+  .filter-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding-top: 10px;
+  }
+
+  .playlist-category-tabs {
+    width: 100%;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .playlist-tab-btn {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 7px 11px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .search-wrapper {
+    width: 100%;
+    flex: 1 1 100%;
+    min-width: 0 !important;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 9px 14px 9px 34px;
+    font-size: 0.84rem;
+  }
+
+  /* -------------------------------------------------------------
+     F. TRACK LIST TABLE & ROWS
+     ------------------------------------------------------------- */
+  .track-list-header-row {
+    display: none !important;
+  }
+
+  .track-list-container {
+    padding: 10px 10px 24px;
+  }
+
+  .track-row {
+    grid-template-columns: 24px 42px 1fr auto;
+    gap: 8px;
+    padding: 8px 8px;
+    margin-bottom: 6px;
+  }
+
+  .track-col-index {
+    font-size: 0.76rem;
+  }
+
+  .track-artwork-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+  }
+
+  .track-col-info {
+    padding: 0 4px;
+    min-width: 0;
+  }
+
+  .track-title {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+
+  .track-artist {
+    font-size: 0.76rem;
+  }
+
+  .track-col-score,
+  .track-col-duration {
+    display: none !important;
+  }
+
+  .track-col-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .track-action-btn {
+    padding: 6px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .track-action-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Saved Playlists Row Mobile Layout */
+  .track-row.track-row-saved {
+    grid-template-columns: 24px 42px 1fr auto;
+    gap: 8px;
+    padding: 8px 8px;
+  }
+
+  .track-row.track-row-saved > div:nth-child(4),
+  .track-row.track-row-saved > div:nth-child(5) {
+    display: none !important;
+  }
+
+  .track-row.track-row-saved .btn-play-saved-pl {
+    padding: 6px 11px;
+    font-size: 0.76rem;
+  }
+
+  /* -------------------------------------------------------------
+     G. COMPACT SPOTIFY-STYLE FLOATING PLAYER (FULL CONTROLS)
+     ------------------------------------------------------------- */
+  .spotify-floating-player {
+    display: flex !important;
+    flex-direction: column !important;
+    width: calc(100% - 16px) !important;
+    max-width: 520px;
+    height: auto !important;
+    bottom: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    padding: 10px 12px 10px !important;
+    border-radius: var(--radius-md) !important;
+    gap: 6px;
+    box-sizing: border-box;
+  }
+
+  /* Row 1: Track Metadata + Like/Dislike/Spotify/Focus */
+  .player-meta-wrap {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .player-cover-box {
+    width: 42px;
+    height: 42px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .player-song-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .player-song-title {
+    font-size: 0.88rem;
+    line-height: 1.2;
+    margin-bottom: 2px;
+  }
+
+  .player-song-artist {
+    font-size: 0.74rem;
+    line-height: 1.2;
+  }
+
+  .player-ai-pill {
+    font-size: 0.68rem;
+    display: inline-block;
+  }
+
+  .player-icon-btn {
+    padding: 6px;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+  }
+
+  .player-icon-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Row 2: Scrubber timeline */
+  .player-controls-wrap {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .player-scrubber-wrap {
+    width: 100%;
+    max-width: 100%;
+    gap: 6px;
+  }
+
+  .time-text {
+    font-size: 0.68rem;
+    min-width: 26px;
+  }
+
+  .progress-bar-track {
+    height: 4px;
+  }
+
+  /* Row 3: Playback Controls & Volume */
+  .player-buttons-row {
+    width: 100%;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 0;
+    padding-top: 2px;
+  }
+
+  .player-ctrl-btn {
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .player-ctrl-btn svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .btn-play-pause-spot {
+    width: 38px;
+    height: 38px;
+  }
+
+  .btn-play-pause-spot svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .player-right-wrap {
+    display: none !important;
+  }
+
+  /* -------------------------------------------------------------
+     H. MODALS & POPUPS
+     ------------------------------------------------------------- */
+  .ai-modal-backdrop,
+  .save-modal-backdrop {
+    padding: 10px;
+  }
+
+  .ai-modal-card {
+    padding: 22px 16px 20px;
+    border-radius: var(--radius-md);
+    max-height: 92vh;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.9);
+  }
+
+  .ai-modal-header {
+    margin-bottom: 18px;
+    padding-right: 32px;
+  }
+
+  .ai-modal-title {
+    font-size: 1.45rem;
+    word-break: break-word;
+  }
+
+  .ai-modal-desc {
+    font-size: 0.82rem;
+  }
+
+  .pref-group {
+    margin-bottom: 16px;
+  }
+
+  .pref-group-title {
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+  }
+
+  .chip-options-grid {
+    gap: 6px;
+  }
+
+  .pref-chip {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    max-width: 100%;
+    word-break: break-word;
+    text-align: left;
+  }
+
+  .modal-close-btn {
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .save-modal-card {
+    padding: 22px 18px;
+    border-radius: var(--radius-md);
+  }
+
+  .exit-focus-control {
+    top: 12px;
+    right: 12px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+  }
+}
+
+/* -------------------------------------------------------------
+   Small Smartphone Screens (<= 480px, e.g. 414px, 390px, 375px)
+   ------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .hero-section {
+    padding: 42px 0 28px;
+  }
+
+  .hero-heading {
+    font-size: clamp(1.8rem, 8vw, 2.2rem);
+    letter-spacing: -0.6px;
+  }
+
+  .hero-subtitle {
+    font-size: 0.92rem;
+    margin-bottom: 22px;
+  }
+
+  .showcase-header {
+    padding: 18px 12px 14px;
+  }
+
+  .showcase-title-area h2 {
+    font-size: 1.35rem;
+  }
+
+  .vibe-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .vibe-card {
+    padding: 8px 8px;
+    gap: 7px;
+  }
+
+  .vibe-card-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  .vibe-card-title {
+    font-size: 0.78rem;
+  }
+
+  .vibe-card-subtitle {
+    font-size: 0.65rem;
+  }
+
+  .track-list-container {
+    padding: 6px 6px 20px;
+  }
+
+  .track-row {
+    grid-template-columns: 20px 40px 1fr auto;
+    gap: 6px;
+    padding: 7px 6px;
+  }
+
+  .track-artwork-box {
+    width: 40px;
+    height: 40px;
+  }
+
+  .track-title {
+    font-size: 0.86rem;
+  }
+
+  .track-artist {
+    font-size: 0.72rem;
+  }
+
+  .track-action-btn {
+    padding: 5px;
+    width: 27px;
+    height: 27px;
+  }
+
+  .track-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .spotify-floating-player {
+    width: calc(100% - 12px) !important;
+    padding: 8px 10px 8px !important;
+    gap: 5px;
+    bottom: 6px !important;
+  }
+
+  .player-cover-box {
+    width: 38px;
+    height: 38px;
+  }
+
+  .player-song-title {
+    font-size: 0.82rem;
+  }
+
+  .player-song-artist {
+    font-size: 0.7rem;
+  }
+
+  .player-icon-btn {
+    padding: 5px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .player-buttons-row {
+    gap: 8px;
+  }
+
+  .player-ctrl-btn {
+    padding: 4px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .player-ctrl-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .btn-play-pause-spot {
+    width: 36px;
+    height: 36px;
+  }
+
+  .btn-play-pause-spot svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* -------------------------------------------------------------
+   Ultra-Narrow Mobile Screens (<= 340px, e.g. 320px)
+   ------------------------------------------------------------- */
+@media (max-width: 340px) {
+  .container {
+    padding: 0 8px;
+  }
+
+  .brand-logo {
+    font-size: 1.05rem;
+    gap: 7px;
+  }
+
+  .brand-cup-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .brand-cup-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hero-heading {
+    font-size: 1.65rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    padding: 11px 16px;
+    font-size: 0.9rem;
+  }
+
+  .showcase-header {
+    padding: 14px 8px 12px;
+  }
+
+  .showcase-title-area h2 {
+    font-size: 1.22rem;
+  }
+
+  .vibe-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vibe-lang-pills {
+    gap: 4px;
+  }
+
+  .lang-pill {
+    padding: 5px 7px;
+    font-size: 0.72rem;
+  }
+
+  .track-row {
+    grid-template-columns: 36px 1fr auto;
+    gap: 6px;
+    padding: 6px 4px;
+  }
+
+  .track-col-index {
+    display: none !important;
+  }
+
+  .track-artwork-box {
+    width: 36px;
+    height: 36px;
+  }
+
+  .track-action-btn {
+    padding: 4px;
+    width: 25px;
+    height: 25px;
+  }
+
+  .spotify-floating-player {
+    width: calc(100% - 8px) !important;
+    padding: 7px 8px !important;
+  }
+
+  .player-buttons-row {
+    gap: 6px;
+  }
+
+  .player-ctrl-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .btn-play-pause-spot {
+    width: 34px;
+    height: 34px;
+  }
+}
+
 
