@@ -4,9 +4,9 @@
   "description": "Café Sukoon — AI-Powered Music Sanctuary & Personalized Music Recommendation System",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "start": "node server.js",
+    "build": "node build.js",
+    "validate": "node -c js/app.js js/audioEngine.js js/auth.js js/data.js js/recommendationEngine.js"
   },
   "keywords": [
     "music",
@@ -16,10 +16,5 @@
     "audio"
   ],
   "author": "Café Sukoon",
-  "license": "MIT",
-  "dependencies": {
-    "next": "^16.3.8",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
-  }
+  "license": "MIT"
 }
