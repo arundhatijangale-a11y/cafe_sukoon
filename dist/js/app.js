@@ -312,8 +312,13 @@ class CafeSukoonAIApp {
     if (!video) return;
 
     video.muted = true;
+    video.defaultMuted = true;
+    video.volume = 0;
     video.loop = true;
     video.playsInline = true;
+    video.setAttribute('muted', '');
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
 
     const playPromise = video.play();
     if (playPromise !== undefined) {
@@ -322,9 +327,11 @@ class CafeSukoonAIApp {
           video.play().catch(() => {});
           window.removeEventListener('click', unlock);
           window.removeEventListener('touchstart', unlock);
+          window.removeEventListener('scroll', unlock);
         };
-        window.addEventListener('click', unlock, { once: true });
-        window.addEventListener('touchstart', unlock, { once: true });
+        window.addEventListener('click', unlock, { once: true, passive: true });
+        window.addEventListener('touchstart', unlock, { once: true, passive: true });
+        window.addEventListener('scroll', unlock, { once: true, passive: true });
       });
     }
   }

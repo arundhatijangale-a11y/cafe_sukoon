@@ -3,6 +3,11 @@
 Thumbs.db
 desktop.ini
 
-# Node / Dependencies (if any)
+# Node / Dependencies
 node_modules/
 *.log
+
+# Next.js build output
+.next/
+out/
+dist/
